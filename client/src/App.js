@@ -1,15 +1,16 @@
+// src/App.js
 import React from 'react';
-import UserForm from './UserForm';
-import UserList from './UserList';
+import { Routes, Route } from 'react-router-dom';
+import QuestionsComponent from './components/QuestionsComponent';
+import ResultComponent from './components/ResultComponent';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Bible Learning App</h1>
-      </header>
-      <UserForm />
-      <UserList />
+      <Routes>
+        <Route path="/" element={<QuestionsComponent />} />
+        <Route path="/result" element={<ResultComponent />} />
+      </Routes>
     </div>
   );
 }

@@ -1,5 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const userRoutes = require('./routes/userRoutes');
+const sessionRoutes = require('./routes/sessionRoutes');
+const bodyParser = require('body-parser');
+
 const app = express();
 const port = process.env.PORT || 3000;
 const mySecret = process.env['MONGO_URI'];
@@ -8,7 +13,8 @@ const mySecret = process.env['MONGO_URI'];
 mongoose.set('strictQuery', false);
 
 // Middleware to parse JSON
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose.connect(mySecret, {
@@ -29,6 +35,10 @@ app.get('/', (req, res) => {
 app.get('/api/test', (req, res) => {
   res.send('API works');
 });
+
+// Mount routes
+app.use('/api', userRoutes);
+app.use('/api', sessionRoutes);
 
 // Start the server
 app.listen(port, () => {

@@ -1,8 +1,6 @@
-// src/UserForm.js
 import React, { useState } from 'react';
 
-const UserForm = () => {
-  const [name, setName] = useState('');
+const LoginForm = ({ setToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -10,28 +8,27 @@ const UserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://35f2-34-23-100-200.ngrok-free.app/api/users', {
+      const response = await fetch('https://70fc-34-23-100-200.ngrok-free.app/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ email, password }),
       });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      const data = await response.json();
+      if (response.ok) {
+        setToken(data.token);
+        setMessage('Login successful!');
+      } else {
+        setMessage('Error: ' + data.message);
       }
-      setMessage('User created successfully!');
     } catch (error) {
-      setMessage('Error creating user: ' + error.message);
+      setMessage('Error: ' + error.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Name:</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </div>
       <div>
         <label>Email:</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -40,10 +37,10 @@ const UserForm = () => {
         <label>Password:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
-      <button type="submit">Create User</button>
+      <button type="submit">Login</button>
       {message && <p>{message}</p>}
     </form>
   );
 };
 
-export default UserForm;
+export default LoginForm;

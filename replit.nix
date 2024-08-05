@@ -1,5 +1,6 @@
 { pkgs }: {
   deps = [
+    pkgs.tree
     pkgs.unzip
     pkgs.wget
     pkgs.python310Packages.pyngrok

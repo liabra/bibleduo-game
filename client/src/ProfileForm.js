@@ -1,28 +1,47 @@
-// src/UserForm.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const UserForm = () => {
+const ProfileForm = ({ token }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch('https://70fc-34-23-100-200.ngrok-free.app/api/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setName(data.name);
+        setEmail(data.email);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      }
+    };
+
+    fetchProfile();
+  }, [token]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://35f2-34-23-100-200.ngrok-free.app/api/users', {
-        method: 'POST',
+      const response = await fetch('https://a52a-34-73-151-253.ngrok-free.app/api/me', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ name, email, password }),
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      setMessage('User created successfully!');
+      setMessage('Profile updated successfully!');
     } catch (error) {
-      setMessage('Error creating user: ' + error.message);
+      setMessage('Error updating profile: ' + error.message);
     }
   };
 
@@ -40,10 +59,10 @@ const UserForm = () => {
         <label>Password:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
-      <button type="submit">Create User</button>
+      <button type="submit">Update Profile</button>
       {message && <p>{message}</p>}
     </form>
   );
 };
 
-export default UserForm;
+export default ProfileForm;
