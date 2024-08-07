@@ -5,7 +5,11 @@ import './ResultComponent.css';
 const ResultComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { responses, questions, score } = location.state || { responses: {}, questions: [], score: 0 };
+  const { responses, questions } = location.state || {};
+
+  if (!responses || !questions) {
+    return <div>Loading...</div>;
+  }
 
   const handleRestart = () => {
     navigate('/');
@@ -13,22 +17,26 @@ const ResultComponent = () => {
 
   return (
     <div className="result-container">
-      <h2>Votre score: {score} / 10</h2>
-      <button onClick={handleRestart}>Recommencer</button>
-      <div className="summary">
-        <details open>
-          <summary>Résumé des questions</summary>
-          <ul>
-            {questions.map((question, index) => (
-              <li key={index} style={{ color: responses[index] === question.correctAnswer ? 'green' : 'red' }}>
-                <strong>Question:</strong> {question.question}<br />
-                <strong>Réponse:</strong> {responses[index]}<br />
-                <strong>Correction:</strong> {question.correctAnswer}
+      <header className="App-header">
+        <h1>Résultats</h1>
+      </header>
+      <p>Votre score: {Object.values(responses).filter((response, index) => response === questions[index].correctAnswer).length} / 10</p>
+      <details>
+        <summary>Résumé des questions</summary>
+        <ul>
+          {questions.map((question, index) => {
+            const isCorrect = responses[index] === question.correctAnswer;
+            return (
+              <li key={index} className={isCorrect ? 'correct' : 'incorrect'}>
+                <p>{question.question}</p>
+                <p>Votre réponse: {responses[index]}</p>
+                {!isCorrect && <p>Correction: {question.correctAnswer}</p>}
               </li>
-            ))}
-          </ul>
-        </details>
-      </div>
+            );
+          })}
+        </ul>
+      </details>
+      <button onClick={handleRestart}>Recommencer</button>
     </div>
   );
 };
