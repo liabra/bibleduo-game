@@ -1,5 +1,6 @@
 { pkgs }: {
   deps = [
+    pkgs.zip
     pkgs.tree
     pkgs.unzip
     pkgs.wget

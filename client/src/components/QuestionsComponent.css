@@ -74,6 +74,35 @@
   margin-top: 20px;
 }
 
+/* Classe pour les retours en gris */
+.gray {
+  color: gray;
+}
+
+/* Exemple d'ajustement pour les feedbacks */
+.feedback {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.gray {
+  color: gray;
+}
+
+.feedback {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+
 .questions-box {
   width: 80%;
 }

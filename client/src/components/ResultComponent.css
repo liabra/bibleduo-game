@@ -1,57 +1,60 @@
-                       /* ResultComponent.css */
-                       .result-container {
-                         max-width: 600px;
-                         margin: 20px auto;
-                         padding: 20px;
-                         background: white;
-                         border-radius: 10px;
-                         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                       }
+.result-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-                       .App-header {
-                         background-color: #282c34;
-                         padding: 20px;
-                         color: white;
-                         text-align: center;
-                         margin-bottom: 20px;
-                       }
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-                       .correct {
-                         color: green;
-                       }
+.correct {
+  color: green;
+}
 
-                       .incorrect {
-                         color: red;
-                       }
+.incorrect {
+  color: red;
+}
 
-                       button {
-                         background-color: #282c34;
-                         color: white;
-                         padding: 10px 20px;
-                         border: none;
-                         border-radius: 5px;
-                         cursor: pointer;
-                         margin-top: 20px;
-                       }
+.unknown {
+  color: gray;
+}
 
-                       button:hover {
-                         background-color: #3e3e3e;
-                       }
+button {
+  background-color: #282c34;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
 
-                       details summary {
-                         cursor: pointer;
-                         font-weight: bold;
-                         margin-top: 20px;
-                       }
+button:hover {
+  background-color: #3e3e3e;
+}
 
-                       details[open] summary {
-                         margin-bottom: 10px;
-                       }
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+}
 
-                       ul {
-                         padding-left: 20px;
-                       }
+details[open] summary {
+  margin-bottom: 10px;
+}
 
-                       li {
-                         margin-bottom: 10px;
-                       }
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
