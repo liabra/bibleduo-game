@@ -1,0 +1,300 @@
+.question-container {
+  width: 600px; /* Largeur fixe */
+  height: 500px; /* Hauteur fixe */
+  margin: auto; /* Centre la boîte */
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Répartit les sections de la boîte */
+  overflow: hidden;
+}
+
+.error-message {
+  color: #ff8800;
+  margin-top: 10px;
+}
+
+button {
+  margin: 5px;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Style pour le bouton "Passer" */
+.btn-small {
+  font-size: 0.8rem; /* Taille du texte plus petite */
+  padding: 5px 10px; /* Réduction des marges internes */
+  background-color: lightgray; /* Couleur de fond (ajustable) */
+  color: black; /* Couleur du texte */
+  border: 1px solid gray; /* Bordure plus fine */
+  border-radius: 4px; /* Coins légèrement arrondis */
+  cursor: pointer;
+}
+
+.btn-small:hover {
+  background-color: #ddd; /* Légère variation au survol */
+}
+
+.btn-small.secondary {
+  background-color: transparent; /* Fond transparent */
+  color: gray; /* Texte en gris léger */
+  border: none; /* Pas de bordure */
+  font-size: 0.8rem; /* Même taille */
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.btn-small.secondary:hover {
+  color: black; /* Devient noir au survol */
+  text-decoration: underline; /* Souligne légèrement au survol */
+}
+
+
+.title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.question-header {
+  height: 80px; /* Hauteur fixe pour l'en-tête */
+  overflow: hidden; /* Cache le surplus de texte */
+}
+
+.questions-box {
+  height: 200px; /* Hauteur dédiée aux options */
+  overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.navigation .btn-small:hover {
+  background-color: #ccc;
+}
+
+.navigation .btn-small {
+  background-color: #eee;
+  color: #333;
+}
+
+.navigation button {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  text-align: center;
+  white-space: normal; /* Permet un retour à la ligne */
+  word-wrap: break-word; /* Coupe les mots longs */
+  margin-bottom: 15px;
+}
+
+.question-header {
+  height: 100px; /* Hauteur fixe pour l'en-tête */
+  overflow: hidden;
+  text-align: center;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.option input {
+  margin-right: 10px;
+}
+
+.timer {
+  margin-top: 20px;
+}
+
+.timer .orange {
+  color: orange;
+  font-weight: bold;
+}
+
+.timer .red {
+  color: red;
+  font-weight: bold;
+  animation: blink 1s infinite;
+}
+
+.timer .orange-blink {
+  color: orange;
+  font-weight: bold;
+  animation: blink 1s infinite;
+}
+
+.timer .red-blink {
+  color: red;
+  font-weight: bold;
+  animation: blink 1s infinite;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Classe pour les retours en gris */
+.gray {
+  color: gray;
+}
+
+/* Exemple d'ajustement pour les feedbacks */
+.feedback {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  color: #333;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.gray {
+  color: gray;
+}
+
+.questions-box {
+  flex-grow: 1; /* Prend l'espace restant */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto; /* Barre de défilement si trop d'options */
+  padding: 10px 0;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Styles pour l'encart des mises à jour */
+.update-section {
+  font-size: 12px;
+  color: gray;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.update-section summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.update-section p {
+  margin-top: 5px;
+  line-height: 1.4;
+  max-height: 100px; /* Limite la hauteur si nécessaire */
+  overflow-y: auto;
+}
+
+.mode-selection {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.mode-selection label {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.mode-selection select {
+  font-size: 16px;
+  padding: 5px;
+}
+.category-filter {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category-filter select {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.questions-list {
+  margin-top: 20px;
+}
+
+.question-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.quiz-settings {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.quiz-settings label {
+  display: block;
+  margin: 10px 0;
+}
+
+.quiz-settings input {
+  margin-left: 10px;
+}
+
+.small-button {
+  font-size: 12px;
+  padding: 6px 10px;
+  margin-left: 5px;
+}
+
+
+button {
+  margin: 10px;
+  padding: 8px 12px;
+  font-size: 16px;
+}
