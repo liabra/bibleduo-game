@@ -27,7 +27,7 @@ const QuestionsComponent = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [feedbackClass, setFeedbackClass] = useState(''); // ✅ Gérer l'animation sans `getElementById`
-  const [errorMessage, setErrorMessage] = useState('');
+  const [, setErrorMessage] = useState('');
   const [settings, setSettings] = useState({
       numQuestions: 5,
       timerEnabled: false,
@@ -79,9 +79,7 @@ const QuestionsComponent = () => {
         navigate('/result', { state: { responses, questions } });
       }
     }, 350);
-  }, [currentQuestionIndex, questions, responses, navigate, settings.timerDuration]);
-
-
+  }, [currentQuestionIndex, questions, responses, navigate, settings.timerDuration, transitionMode]);
 
   const levenshteinDistance = (a, b) => {
     const matrix = Array(a.length + 1)
@@ -164,15 +162,10 @@ const QuestionsComponent = () => {
     setIsAnswered(true);
 
     // ✅ Lancer un délai automatique de 5 secondes, sauf si l'utilisateur clique sur "Suivant"
-    const nextTimeout = setTimeout(() => {
+    setTimeout(() => {
       handleNextQuestion();
     }, 5000);
-
-    // ✅ Enregistrer le timeout pour l’annuler si l'utilisateur clique sur "Suivant"
-    setAutoNextTimeout(nextTimeout);
   };
-
-  const [autoNextTimeout, setAutoNextTimeout] = useState(null);
 
   const handleSkipQuestion = useCallback(() => {
     setResponses((prevResponses) => ({ ...prevResponses, [currentQuestionIndex]: 'Non répondu' }));
