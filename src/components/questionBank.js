@@ -1,184 +1,743 @@
 const questionBank = [
-   // Questions classiques
-  { question: "Jésus est-il né à Nazareth ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Faux", reference: "Matthieu 2:1" },
-  { question: "Quel âge avait la fille de Jaïrus lorsqu'elle a été ressuscitée par Jésus ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "12", reference: "Matthieu 9:18-26" },
-  { question: "Combien de fois devons-nous pardonner, selon Jésus ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "77 fois 7 fois", reference: "Matthieu 18:22" },
-  { question: "Combien de jours Jésus a-t-il jeûné dans le désert ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "40", reference: "Matthieu 4:2" },
-  { question: "Combien de pains Jésus a-t-il utilisé pour nourrir les 5000 hommes ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "5", reference: "Matthieu 14:17" },
-  { question: "Combien de frères Jésus avait-il, selon le livre de Matthieu ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "4", reference: "Matthieu 13:55" },
-  { question: "Quel est le nom du disciple qui a trahi Jésus ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "Judas", reference: "Matthieu 26:14-16" },
-  { question: "Dans quelle ville Jésus est-il né ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "Bethléem", reference: "Matthieu 2:1" },
-  { question: "Quel est le premier mot du sermon sur la montagne ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "Heureux", reference: "Matthieu 5:3" },
-  { question: "Combien de jours Jésus est-il resté dans le tombeau avant sa résurrection ?", type: "Complétion de Texte", category: "Question", options: [], correctAnswer: "3", reference: "Matthieu 12:40" },
-  { question: "Combien de jours et de nuits Jésus a-t-il jeûné dans le désert ?", type: "Nombre", category: "Question", options: ["40", "30", "50", "Je ne sais pas"], correctAnswer: "40", reference: "Matthieu 4:2" },
-  { question: "Jésus a-t-il été baptisé par Jean-Baptiste ?", type: "Oui ou Non", category: "Question", options: ["Oui", "Non", "Je ne sais pas"], correctAnswer: "Oui", reference: "Matthieu 3:13" },
-  { question: "Jésus a-t-il multiplié les pains et les poissons pour nourrir la foule ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 14:19-21" },
-  { question: "Combien de disciples Jésus avait-il ?", type: "Nombre", category: "Question", options: ["12", "10", "11", "Je ne sais pas"], correctAnswer: "12", reference: "Matthieu 10:2-4" },
-  { question: "Le premier sermon de Jésus est appelé le Sermon sur la Montagne ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 5:1-2" },
-  { question: "Combien de Béatitudes Jésus a-t-il enseignées dans le Sermon sur la Montagne ?", type: "Nombre", category: "Question", options: ["8", "6", "10", "Je ne sais pas"], correctAnswer: "8", reference: "Matthieu 5:3-10" },
-  { question: "Jésus a-t-il marché sur l'eau ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 14:25" },
-  { question: "Qui a trahi Jésus pour trente pièces d'argent ?", type: "QCM", category: "Question", options: ["Pierre", "Jean", "Judas", "Je ne sais pas"], correctAnswer: "Judas", reference: "Matthieu 26:14-15" },
-  { question: "Jésus a-t-il ressuscité Lazare des morts ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Jean 11:1-44" },
-  { question: "Combien de fois Jésus a-t-il prédit sa propre mort et résurrection ?", type: "Nombre", category: "Question", options: ["1", "2", "3", "Je ne sais pas"], correctAnswer: "3", reference: "Matthieu 16:21, 17:22-23, 20:17-19" },
-  { question: "Jésus a-t-il chassé les marchands du temple ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 21:12" },
-  { question: "Jésus a-t-il guéri un aveugle en lui touchant les yeux ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 9:27-31" },
-  { question: "Combien de paraboles sont contenues dans le livre de Matthieu ?", type: "Nombre", category: "Question", options: ["23", "15", "30", "Je ne sais pas"], correctAnswer: "23", reference: "Divers versets" },
-  { question: "Le sermon sur la montagne comprend-il le Notre Père ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 6:9-13" },
-  { question: "Jésus a-t-il été tenté par le diable ?", type: "Oui ou Non", category: "Question", options: ["Oui", "Non", "Je ne sais pas"], correctAnswer: "Oui", reference: "Matthieu 4:1" },
-  { question: "Jésus a-t-il dit : « Aimez vos ennemis » ?", type: "Oui ou Non", category: "Question", options: ["Oui", "Non", "Je ne sais pas"], correctAnswer: "Oui", reference: "Matthieu 5:44" },
-  { question: "Combien de talents l'homme a-t-il reçu dans la parabole des talents ?", type: "QCM", category: "Question", options: ["1", "3", "5", "Je ne sais pas"], correctAnswer: "5", reference: "Matthieu 25:14-30" },
-  { question: "Combien de vierges étaient sages dans la parabole des dix vierges ?", type: "Nombre", category: "Question", options: ["1", "3", "5", "Je ne sais pas"], correctAnswer: "5", reference: "Matthieu 25:2" },
-  { question: "Jésus a-t-il enseigné de prier en secret ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 6:6" },
-  { question: "Combien de fois devons-nous pardonner, selon Jésus ?", type: "Nombre", category: "Question", options: ["7 fois 9 fois", "70 fois 2 fois", "77 fois 7 fois", "Je ne sais pas"], correctAnswer: "77 fois 7 fois", reference: "Matthieu 18:22" },
-  { question: "Jésus a-t-il été transfiguré sur une haute montagne ?", type: "Vrai ou Faux", category: "Question", options: ["Vrai", "Faux", "Je ne sais pas"], correctAnswer: "Vrai", reference: "Matthieu 17:1-2" },
-  // Devinette.
+  // Questions "Vrai ou Faux"
+  { 
+    question: "Jésus est-il né à Nazareth ?", 
+    type: "Vrai ou Faux", 
+    category: "Questions", 
+    options: ["Vrai", "Faux", "Je ne sais pas"], 
+    correctAnswer: "Faux", 
+    reference: "Matthieu 2:1" 
+  },
+  { 
+    "question": "Jésus est-il né à Nazareth ?", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "Matthieu 2:1" 
+  },
+  { 
+    "question": "Moïse a construit l'arche de Noé.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "Genèse 6:14-22" 
+  },
+  { 
+    "question": "Paul était l'un des douze premiers disciples de Jésus.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "Actes 9:1-19" 
+  },
+  { 
+    "question": "Jésus a multiplié cinq pains et deux poissons pour nourrir une foule.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Vrai", 
+    "reference": "Matthieu 14:13-21" 
+  },
+  { 
+    "question": "Le premier miracle de Jésus fut de guérir un aveugle.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "Jean 2:1-11" 
+  },
+  { 
+    "question": "David a tué Goliath avec une épée.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "1 Samuel 17:50" 
+  },
+  { 
+    "question": "La Bible est composée de 66 livres.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Vrai", 
+    "reference": "2 Timothée 3:16" 
+  },
+  { 
+    "question": "Jean-Baptiste était un disciple de Jésus.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "Jean 1:6-8" 
+  },
+  { 
+    "question": "L'Apocalypse est le premier livre du Nouveau Testament.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Faux", 
+    "reference": "Matthieu 1:1" 
+  },
+  { 
+    "question": "Jésus a été baptisé dans le Jourdain par Jean-Baptiste.", 
+    "type": "Vrai ou Faux", 
+    "category": "Questions", 
+    "options": ["Vrai", "Faux", "Je ne sais pas"], 
+    "correctAnswer": "Vrai", 
+    "reference": "Matthieu 3:13-17" 
+  },
+  {
+    question: "Jésus a transformé l'eau en vin lors d'une noce à Cana.",
+    type: "Vrai ou Faux",
+    category: "Questions",
+    options: ["Vrai", "Faux", "Je ne sais pas"],
+    correctAnswer: "Vrai",
+    reference: "Jean 2:1-11"
+  },
+  {
+    question: "Moïse a conduit les Israélites à travers la mer Rouge en construisant un pont.",
+    type: "Vrai ou Faux",
+    category: "Questions",
+    options: ["Vrai", "Faux", "Je ne sais pas"],
+    correctAnswer: "Faux",
+    reference: "Exode 14:21-22"
+  },
+  {
+    question: "David était le père de Salomon.",
+    type: "Vrai ou Faux",
+    category: "Questions",
+    options: ["Vrai", "Faux", "Je ne sais pas"],
+    correctAnswer: "Vrai",
+    reference: "1 Rois 1:30"
+  },
+  {
+    question: "Jésus a écrit un livre dans le Nouveau Testament.",
+    type: "Vrai ou Faux",
+    category: "Questions",
+    options: ["Vrai", "Faux", "Je ne sais pas"],
+    correctAnswer: "Faux",
+    reference: "Aucun passage"
+  },
+  {
+    question: "Paul était l'un des douze premiers disciples de Jésus.",
+    type: "Vrai ou Faux",
+    category: "Questions",
+    options: ["Vrai", "Faux", "Je ne sais pas"],
+    correctAnswer: "Faux",
+    reference: "Actes 9:1-19"
+  },
+
+  // Questions "Complétion de Texte"
+  { 
+    question: "Quel âge avait la fille de Jaïrus lorsqu'elle a été ressuscitée par Jésus ?", 
+    type: "Complétion de Texte", 
+    category: "Questions", 
+    options: [], 
+    correctAnswer: "12", 
+    reference: "Marc 5:42" 
+  },
+  { 
+    "question": "Quel âge avait la fille de Jaïrus lorsqu'elle a été ressuscitée par Jésus ?", 
+    "type": "Complétion de Texte", 
+    "category": "Questions", 
+    "options": [], 
+    "correctAnswer": "12", 
+    "reference": "Marc 5:42" 
+  },
+  { 
+    "question": "Jésus a pleuré à la mort de son ami _____.", 
+    "type": "Complétion de Texte", 
+    "category": "Questions", 
+    "options": [], 
+    "correctAnswer": "Lazare", 
+    "reference": "Jean 11:35" 
+  },
+  { 
+    "question": "Jésus a été trahi par _____.", 
+    "type": "Complétion de Texte", 
+    "category": "Questions", 
+    "options": [], 
+    "correctAnswer": "Judas", 
+    "reference": "Matthieu 26:14-16" 
+  },
+  { 
+    "question": "Le premier livre de la Bible est _____.", 
+    "type": "Complétion de Texte", 
+    "category": "Questions", 
+    "options": [], 
+    "correctAnswer": "Genèse", 
+    "reference": "Genèse 1:1" 
+  },
+  { 
+    "question": "Le fruit défendu a été mangé par _____.", 
+    "type": "Complétion de Texte", 
+    "category": "Questions", 
+    "options": [], 
+    "correctAnswer": "Ève", 
+    "reference": "Genèse 3:6" 
+  },
+  { 
+    question: "Dans quelle ville Jésus est-il né ?", 
+    type: "Complétion de Texte", 
+    category: "Questions", 
+    options: [], 
+    correctAnswer: "Bethléem", 
+    reference: "Matthieu 2:1" 
+  },
+
+  // Questions "Nombres"
+  { 
+    question: "Combien de fois devons-nous pardonner, selon Jésus ?", 
+    type: "Nombre", 
+    category: "Nombres", 
+    options: ["7 fois", "77 fois 7 fois", "70 fois 7 fois", "Je ne sais pas"], 
+    correctAnswer: "77 fois 7 fois", 
+    reference: "Matthieu 18:22" 
+  },
+  { 
+    "question": "Combien de pains et de poissons Jésus a-t-il multipliés pour nourrir la foule ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["5 pains et 2 poissons", "3 pains et 5 poissons", "7 pains et 3 poissons", "Je ne sais pas"], 
+    "correctAnswer": "5 pains et 2 poissons", 
+    "reference": "Matthieu 14:17-21" 
+  },
+  { 
+    "question": "Combien de commandements Dieu a-t-il donnés à Moïse sur le mont Sinaï ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["5", "10", "12", "Je ne sais pas"], 
+    "correctAnswer": "10", 
+    "reference": "Exode 20:1-17" 
+  },
+  { 
+    "question": "Combien de jours a duré le déluge ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["40 jours", "120 jours", "365 jours", "Je ne sais pas"], 
+    "correctAnswer": "40 jours", 
+    "reference": "Genèse 7:12" 
+  },
+  { 
+    "question": "Combien d’apôtres Jésus avait-il ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["7", "10", "12", "Je ne sais pas"], 
+    "correctAnswer": "12", 
+    "reference": "Luc 6:13" 
+  },
+  { 
+    "question": "Combien de jours Dieu a-t-il mis pour créer le monde ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["3", "6", "7", "Je ne sais pas"], 
+    "correctAnswer": "6", 
+    "reference": "Genèse 1:31" 
+  },
+  { 
+    "question": "Combien de plaies Dieu a-t-il envoyées sur l'Égypte ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["5", "7", "10", "Je ne sais pas"], 
+    "correctAnswer": "10", 
+    "reference": "Exode 7-12" 
+  },
+  { 
+    "question": "Combien de jours Jonas a-t-il passé dans le ventre du poisson ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["1 jour", "3 jours", "7 jours", "Je ne sais pas"], 
+    "correctAnswer": "3 jours", 
+    "reference": "Jonas 1:17" 
+  },
+  { 
+    "question": "Combien de fois Pierre a-t-il renié Jésus ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["1", "3", "7", "Je ne sais pas"], 
+    "correctAnswer": "3", 
+    "reference": "Matthieu 26:75" 
+  },
+  { 
+    "question": "Combien de jours Jésus a-t-il jeûné dans le désert ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["10", "30", "40", "Je ne sais pas"], 
+    "correctAnswer": "40", 
+    "reference": "Matthieu 4:2" 
+  },
+  { 
+    "question": "Combien d’épîtres Paul a-t-il écrites dans le Nouveau Testament ?", 
+    "type": "Nombre", 
+    "category": "Nombres", 
+    "options": ["9", "13", "21", "Je ne sais pas"], 
+    "correctAnswer": "13", 
+    "reference": "Romains à Philémon" 
+  },
+  { 
+    question: "Combien de jours Jésus a-t-il jeûné dans le désert ?", 
+    type: "Nombre", 
+    category: "Nombres", 
+    options: ["30", "40", "50", "Je ne sais pas"], 
+    correctAnswer: "40", 
+    reference: "Matthieu 4:2" 
+  },
+  { 
+    question: "Combien de disciples Jésus avait-il ?", 
+    type: "Nombre", 
+    category: "Nombres", 
+    options: ["10", "11", "12", "Je ne sais pas"], 
+    correctAnswer: "12", 
+    reference: "Matthieu 10:2-4" 
+  },
+
+  // Questions "QCM"
+  { 
+    question: "Quel est le nom du disciple qui a trahi Jésus ?", 
+    type: "QCM", 
+    category: "QCM", 
+    options: ["Pierre", "Jean", "Judas", "Thomas"], 
+    correctAnswer: "Judas", 
+    reference: "Matthieu 26:14-16" 
+  }, 
+  { 
+    "question": "Quel est le premier miracle de Jésus ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Guérison d'un aveugle", "Multiplication des pains", "Transformation de l'eau en vin", "Je ne sais pas"], 
+    "correctAnswer": "Transformation de l'eau en vin", 
+    "reference": "Jean 2:1-11" 
+  },
+  { 
+    "question": "Qui a reçu les dix commandements ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Moïse", "Abraham", "Élie", "Je ne sais pas"], 
+    "correctAnswer": "Moïse", 
+    "reference": "Exode 20:1-17" 
+  },
+  { 
+    "question": "Comment s'appelle la mère de Jésus ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Marie", "Marthe", "Miriam", "Je ne sais pas"], 
+    "correctAnswer": "Marie", 
+    "reference": "Matthieu 1:18" 
+  },
+  { 
+    "question": "Quel apôtre a marché sur l'eau avec Jésus ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Jean", "Pierre", "Jacques", "Je ne sais pas"], 
+    "correctAnswer": "Pierre", 
+    "reference": "Matthieu 14:29" 
+  },
+  { 
+    "question": "Quel disciple était collecteur d’impôts avant de suivre Jésus ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Matthieu", "Paul", "Judas", "Je ne sais pas"], 
+    "correctAnswer": "Matthieu", 
+    "reference": "Matthieu 9:9" 
+  },
+  { 
+    "question": "Qui est considéré comme le père de la foi dans la Bible ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Moïse", "Abraham", "David", "Je ne sais pas"], 
+    "correctAnswer": "Abraham", 
+    "reference": "Romains 4:16" 
+  },
+  { 
+    "question": "Quel est le plus grand commandement selon Jésus ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Aimer Dieu et son prochain", "Ne pas tuer", "Honorer son père et sa mère", "Je ne sais pas"], 
+    "correctAnswer": "Aimer Dieu et son prochain", 
+    "reference": "Matthieu 22:37-39" 
+  },
+  { 
+    "question": "Quel est le dernier livre du Nouveau Testament ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Éphésiens", "Apocalypse", "Jean", "Je ne sais pas"], 
+    "correctAnswer": "Apocalypse", 
+    "reference": "Apocalypse 1:1" 
+  },
+  { 
+    "question": "Qui a trahi Jésus pour 30 pièces d’argent ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Pierre", "Judas", "Thomas", "Je ne sais pas"], 
+    "correctAnswer": "Judas", 
+    "reference": "Matthieu 26:14-16" 
+  },
+  { 
+    "question": "Quel roi a jeté Daniel dans la fosse aux lions ?", 
+    "type": "QCM", 
+    "category": "QCM", 
+    "options": ["Nabuchodonosor", "Darius", "Salomon", "Je ne sais pas"], 
+    "correctAnswer": "Darius", 
+    "reference": "Daniel 6:16" 
+  },
+  {
+    "question": "Quel est le premier livre de la Bible ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Exode", "Genèse", "Lévitique", "Nombres"],
+    "correctAnswer": "Genèse",
+    "reference": "Genèse 1:1"
+  },
+  {
+    "question": "Qui a construit l'arche pour survivre au déluge ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Moïse", "Abraham", "Noé", "Élie"],
+    "correctAnswer": "Noé",
+    "reference": "Genèse 6:13-22"
+  },
+  {
+    "question": "Quel roi d'Israël a tué Goliath ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Saül", "Salomon", "David", "Josué"],
+    "correctAnswer": "David",
+    "reference": "1 Samuel 17:45-50"
+  },
+  {
+    "question": "Qui a reçu les dix commandements sur le mont Sinaï ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Moïse", "Élie", "Aaron", "Josué"],
+    "correctAnswer": "Moïse",
+    "reference": "Exode 20:1-21"
+  },
+  {
+    "question": "Combien de jours Jésus a-t-il jeûné dans le désert ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["30", "40", "50", "60"],
+    "correctAnswer": "40",
+    "reference": "Matthieu 4:2"
+  },
+  {
+    "question": "Qui est connu comme étant 'l'apôtre des Gentils' ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Pierre", "Jean", "Paul", "Jacques"],
+    "correctAnswer": "Paul",
+    "reference": "Romains 11:13"
+  },
+  {
+    "question": "Dans quelle ville Jésus est-il né ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Nazareth", "Jérusalem", "Bethléem", "Capharnaüm"],
+    "correctAnswer": "Bethléem",
+    "reference": "Matthieu 2:1"
+  },
+  {
+    "question": "Quel disciple a renié Jésus trois fois ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Jean", "Pierre", "Judas", "Thomas"],
+    "correctAnswer": "Pierre",
+    "reference": "Luc 22:61-62"
+  },
+  {
+    "question": "Quel est le dernier livre de la Bible ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Jude", "Apocalypse", "Jean", "Actes"],
+    "correctAnswer": "Apocalypse",
+    "reference": "Apocalypse 1:1"
+  },
+  {
+    "question": "Qui a baptisé Jésus ?",
+    "type": "QCM",
+    "category": "QCM",
+    "options": ["Jean-Baptiste", "Moïse", "Élie", "Pierre"],
+    "correctAnswer": "Jean-Baptiste",
+    "reference": "Matthieu 3:13-17"
+  },
+  {
+    question: "Quel roi a jeté Daniel dans la fosse aux lions ?",
+    type: "QCM",
+    category: "QCM",
+    options: ["Saül", "Nabuchodonosor", "Darius", "Salomon"],
+    correctAnswer: "Darius",
+    reference: "Daniel 6:16"
+  },
+
+  // Devinettes
   { 
     question: "Je suis le roi qui a construit le premier temple à Jérusalem. Qui suis-je ?", 
-    type: "QCM", 
-    category: "Devinette", 
+    type: "Devinettes", 
+    category: "Devinettes", 
     options: ["David", "Salomon", "Saül", "Je ne sais pas"], 
     correctAnswer: "Salomon", 
     reference: "1 Rois 6:1" 
   },
-  { 
-    question: "Je suis l'animal qui a parlé à Balaam. Qui suis-je ?", 
-    type: "QCM", 
-    category: "Devinette", 
-    options: ["Âne", "Chien", "Cheval", "Je ne sais pas"], 
-    correctAnswer: "Âne", 
-    reference: "Nombres 22:28" 
+  {
+    "question": "Je suis le roi qui a construit le premier temple à Jérusalem. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["David", "Salomon", "Saül", "Je ne sais pas"],
+    "correctAnswer": "Salomon",
+    "reference": "1 Rois 6:1"
+  },
+  {
+    "question": "Je suis l'homme qui a survécu au déluge en construisant une arche. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Abraham", "Moïse", "Noé", "Je ne sais pas"],
+    "correctAnswer": "Noé",
+    "reference": "Genèse 6:9-22"
+  },
+  {
+    "question": "J'ai été avalé par un grand poisson et recraché après trois jours. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Élie", "Jonas", "Paul", "Je ne sais pas"],
+    "correctAnswer": "Jonas",
+    "reference": "Jonas 1:17"
+  },
+  {
+    "question": "J'ai trahi Jésus pour 30 pièces d'argent. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Pierre", "Judas", "Thomas", "Je ne sais pas"],
+    "correctAnswer": "Judas",
+    "reference": "Matthieu 26:14-16"
+  },
+  {
+    "question": "Je suis la seule femme juge d'Israël. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Esther", "Ruth", "Débora", "Je ne sais pas"],
+    "correctAnswer": "Débora",
+    "reference": "Juges 4:4"
+  },
+  {
+    "question": "Je suis monté au ciel dans un char de feu sans passer par la mort. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Élie", "Ésaïe", "Ézéchiel", "Je ne sais pas"],
+    "correctAnswer": "Élie",
+    "reference": "2 Rois 2:11"
+  },
+  {
+    "question": "J'ai été enfermé dans une fosse aux lions, mais Dieu m'a sauvé. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Joseph", "Daniel", "David", "Je ne sais pas"],
+    "correctAnswer": "Daniel",
+    "reference": "Daniel 6:16-22"
+  },
+  {
+    "question": "Je suis le disciple que Jésus aimait. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Pierre", "Jean", "Paul", "Je ne sais pas"],
+    "correctAnswer": "Jean",
+    "reference": "Jean 13:23"
+  },
+  {
+    "question": "J'ai été transformé en statue de sel parce que j’ai regardé en arrière. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Sara", "La femme de Lot", "Rachel", "Je ne sais pas"],
+    "correctAnswer": "La femme de Lot",
+    "reference": "Genèse 19:26"
+  },
+  {
+    "question": "J'ai combattu Goliath avec une fronde et une pierre. Qui suis-je ?",
+    "type": "Devinettes",
+    "category": "Devinettes",
+    "options": ["Saül", "David", "Samuel", "Je ne sais pas"],
+    "correctAnswer": "David",
+    "reference": "1 Samuel 17:49"
   },
   { 
     question: "Quel prophète a été avalé par un grand poisson ?", 
-    type: "QCM", 
-    category: "Devinette", 
+    type: "Devinettes", 
+    category: "Devinettes", 
     options: ["Jonas", "Ésaïe", "Élie", "Je ne sais pas"], 
     correctAnswer: "Jonas", 
     reference: "Jonas 1:17" 
   },
-  { 
-    question: "Je suis le premier livre de la Bible. Qui suis-je ?", 
-    type: "QCM", 
-    category: "Devinette", 
-    options: ["Genèse", "Exode", "Lévitique", "Je ne sais pas"], 
-    correctAnswer: "Genèse", 
-    reference: "Genèse 1:1" 
-  },
-  {
-    question: "Je suis la ville où Paul s’est rendu pour prêcher, mais où il a été accueilli par des philosophes sur la colline de l'Aréopage. Quelle ville suis-je ?", 
-    type: "Devinette", 
-    options: ["Athènes", "Rome", "Corinthe", "Jérusalem"], 
-    correctAnswer: "Athènes", 
-    reference: "Actes 17:22-23"
-  },
-  {
-    question: "J’ai été jeté dans une fosse aux lions pour ma foi, mais Dieu m’a sauvé. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["David", "Daniel", "Élie", "Samuel"], 
-    correctAnswer: "Daniel", 
-    reference: "Daniel 6:16-23"
-  },
-  {
-    question: "Je suis une reine célèbre pour ma sagesse et ma visite au roi Salomon. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["La reine de Saba", "La reine Esther", "Débora", "Jézabel"], 
-    correctAnswer: "La reine de Saba", 
-    reference: "1 Rois 10:1-13"
-  },
-  {
-    question: "Je suis le prophète qui a vu un chariot de feu emporter mon maître dans les cieux. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Ésaïe", "Élie", "Élisée", "Jérémie"], 
-    correctAnswer: "Élisée", 
-    reference: "2 Rois 2:11-12"
-  },
-  {
-    question: "Je suis l’homme qui a construit une arche pour sauver sa famille et les animaux d’un déluge. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Moïse", "Noé", "Abraham", "Job"], 
-    correctAnswer: "Noé", 
-    reference: "Genèse 6:13-22"
-  },
-  {
-    question: "J’ai été appelé par Dieu pour libérer les Israélites d’Égypte, mais je balbutiais beaucoup. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Moïse", "Aaron", "Josué", "Samuel"], 
-    correctAnswer: "Moïse", 
-    reference: "Exode 3:10-12"
-  },
-  {
-    question: "Je suis la femme qui a prié intensément pour avoir un enfant et a promis de le consacrer à Dieu. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Anne", "Sarah", "Rachel", "Élisabeth"], 
-    correctAnswer: "Anne", 
-    reference: "1 Samuel 1:10-11"
-  },
-  {
-    question: "Je suis le lieu où Jésus a prié juste avant son arrestation. Quel est mon nom ?", 
-    type: "Devinette", 
-    options: ["Golgotha", "Nazareth", "Gethsémani", "Béthanie"], 
-    correctAnswer: "Gethsémani", 
-    reference: "Matthieu 26:36"
-  },
-  {
-    question: "Je suis l’homme qui a été rendu aveugle sur le chemin de Damas avant de devenir un apôtre. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Paul", "Pierre", "Jean", "Jacques"], 
-    correctAnswer: "Paul", 
-    reference: "Actes 9:3-9"
-  },
-  {
-    question: "Je suis une tour célèbre qui a été construite pour atteindre le ciel, mais Dieu a confondu les langues. Quel est mon nom ?", 
-    type: "Devinette", 
-    options: ["Tour de Jéricho", "Tour de Babel", "Tour de Siloé", "Tour de David"], 
-    correctAnswer: "Tour de Babel", 
-    reference: "Genèse 11:1-9"
-  },
-  {
-    question: "Je suis le prophète qui a été nourri par des corbeaux près d’un ruisseau. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Ésaïe", "Ézéchiel", "Élie", "Amos"], 
-    correctAnswer: "Élie", 
-    reference: "1 Rois 17:2-6"
-  },
-  {
-    question: "Je suis le roi qui a fait jeter trois hommes dans une fournaise ardente pour ne pas avoir adoré une statue. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Saül", "Nabuchodonosor", "Darius", "Hérode"], 
-    correctAnswer: "Nabuchodonosor", 
-    reference: "Daniel 3:19-23"
-  },
-  {
-    question: "Je suis le nom de la montagne où Moïse a reçu les dix commandements. Quelle est cette montagne ?", 
-    type: "Devinette", 
-    options: ["Mont Sinaï", "Mont Hermon", "Mont des Oliviers", "Mont Horeb"], 
-    correctAnswer: "Mont Sinaï", 
-    reference: "Exode 19:18-20"
-  },
-  {
-    question: "Je suis la seule femme jugée dans l’Ancien Testament, connue pour sa sagesse et sa direction. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Esther", "Débora", "Jaël", "Abigaïl"], 
-    correctAnswer: "Débora", 
-    reference: "Juges 4:4-5"
-  },
-  {
-    question: "Je suis le fils qui a demandé son héritage et a quitté la maison pour vivre dans le péché avant de revenir repentant. Qui suis-je ?", 
-    type: "Devinette", 
-    options: ["Le fils prodigue", "Caïn", "Absalom", "Samson"], 
-    correctAnswer: "Le fils prodigue", 
-    reference: "Luc 15:11-32"
-  },
-  { 
-    question: "Je suis le fils qui a demandé son héritage et a quitté la maison pour vivre dans le péché avant de revenir repentant. Qui suis-je ?", 
-      type: "Devinette", 
-      options: ["Le fils prodigue", "Caïn", "Absalom", "Samson"], 
-      correctAnswer: "Le fils prodigue", 
-      reference: "Luc 15:11-32" 
-  }
-  
-  
-];
 
+  // Chronologie
+  {
+    question: "Classez ces événements dans l'ordre chronologique :",
+    type: "Chronologie",
+    category: "Chronologie",
+    options: ["Création de la lumière", "Création des animaux", "Création de l'homme", "Repos de Dieu"],
+    correctAnswer: ["Création de la lumière", "Création des animaux", "Création de l'homme", "Repos de Dieu"],
+    reference: "Genèse 1:1-31"
+  },
+  {
+    "question": "Classez ces événements dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Création de la lumière", "Création des animaux", "Création de l'homme", "Repos de Dieu"],
+    "correctAnswer": ["Création de la lumière", "Création des animaux", "Création de l'homme", "Repos de Dieu"],
+    "reference": "Genèse 1:1-31"
+  },
+  {
+    "question": "Classez ces patriarches dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Abraham", "Isaac", "Jacob", "Joseph"],
+    "correctAnswer": ["Abraham", "Isaac", "Jacob", "Joseph"],
+    "reference": "Genèse 12-50"
+  },
+  {
+    "question": "Classez ces événements de l'Exode dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Les dix plaies", "Sortie d'Égypte", "Ouverture de la mer Rouge", "Don de la loi sur le mont Sinaï"],
+    "correctAnswer": ["Les dix plaies", "Sortie d'Égypte", "Ouverture de la mer Rouge", "Don de la loi sur le mont Sinaï"],
+    "reference": "Exode 7-20"
+  },
+  {
+    "question": "Classez ces événements de la vie de Jésus dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Baptême de Jésus", "Sermon sur la montagne", "Crucifixion", "Résurrection"],
+    "correctAnswer": ["Baptême de Jésus", "Sermon sur la montagne", "Crucifixion", "Résurrection"],
+    "reference": "Matthieu 3-28"
+  },
+  {
+    "question": "Classez ces rois d'Israël dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Saül", "David", "Salomon", "Jéroboam"],
+    "correctAnswer": ["Saül", "David", "Salomon", "Jéroboam"],
+    "reference": "1 Samuel 10 - 1 Rois 12"
+  },
+  {
+    "question": "Classez ces miracles de Jésus dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Transformation de l'eau en vin", "Multiplication des pains", "Marche sur l'eau", "Résurrection de Lazare"],
+    "correctAnswer": ["Transformation de l'eau en vin", "Multiplication des pains", "Marche sur l'eau", "Résurrection de Lazare"],
+    "reference": "Jean 2-11"
+  },
+  {
+    "question": "Classez ces étapes de la Passion du Christ dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Dernier repas", "Arrestation", "Procès", "Crucifixion"],
+    "correctAnswer": ["Dernier repas", "Arrestation", "Procès", "Crucifixion"],
+    "reference": "Matthieu 26-27"
+  },
+  {
+    "question": "Classez ces juges d'Israël dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Gédéon", "Samson", "Débora", "Samuel"],
+    "correctAnswer": ["Débora", "Gédéon", "Samson", "Samuel"],
+    "reference": "Juges 4-16"
+  },
+  {
+    "question": "Classez ces lettres de Paul dans l'ordre de leur écriture :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Romains", "1 Corinthiens", "Galates", "Philippiens"],
+    "correctAnswer": ["Galates", "1 Corinthiens", "Romains", "Philippiens"],
+    "reference": "Épîtres de Paul"
+  },
+  {
+    "question": "Classez ces événements de la Genèse dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Déluge de Noé", "Tour de Babel", "Alliance avec Abraham", "Vente de Joseph par ses frères"],
+    "correctAnswer": ["Déluge de Noé", "Tour de Babel", "Alliance avec Abraham", "Vente de Joseph par ses frères"],
+    "reference": "Genèse 6-37"
+  },
+  {
+    "question": "Classez ces patriarches dans l'ordre chronologique :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Abraham", "Isaac", "Jacob", "Joseph"],
+    "correctAnswer": ["Abraham", "Isaac", "Jacob", "Joseph"],
+    "reference": "Genèse 12-50"
+  },
+  {
+    "question": "Classez ces événements de la vie de Moïse dans l'ordre :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Moïse dans un panier sur le Nil", "Moïse tue un Égyptien", "Les 10 plaies d'Égypte", "Moïse reçoit les 10 commandements"],
+    "correctAnswer": ["Moïse dans un panier sur le Nil", "Moïse tue un Égyptien", "Les 10 plaies d'Égypte", "Moïse reçoit les 10 commandements"],
+    "reference": "Exode 2-20"
+  },
+  {
+    "question": "Classez ces rois d'Israël dans l'ordre de leur règne :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Saül", "David", "Salomon", "Roboam"],
+    "correctAnswer": ["Saül", "David", "Salomon", "Roboam"],
+    "reference": "1 Samuel 10 - 1 Rois 12"
+  },
+  {
+    "question": "Classez ces étapes de l'exil babylonien dans l'ordre :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Destruction du Temple de Jérusalem", "Déportation à Babylone", "Prophétie de Daniel", "Retour sous Cyrus"],
+    "correctAnswer": ["Destruction du Temple de Jérusalem", "Déportation à Babylone", "Prophétie de Daniel", "Retour sous Cyrus"],
+    "reference": "2 Rois 25, Daniel 1, Esdras 1"
+  },
+  {
+    "question": "Classez ces événements de la vie de Jésus dans l'ordre :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Naissance de Jésus", "Baptême par Jean-Baptiste", "Sermon sur la montagne", "Crucifixion et résurrection"],
+    "correctAnswer": ["Naissance de Jésus", "Baptême par Jean-Baptiste", "Sermon sur la montagne", "Crucifixion et résurrection"],
+    "reference": "Matthieu 1-28"
+  },
+  {
+    "question": "Classez ces miracles de Jésus dans l'ordre :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Transformation de l'eau en vin", "Multiplication des pains", "Marche sur l'eau", "Résurrection de Lazare"],
+    "correctAnswer": ["Transformation de l'eau en vin", "Multiplication des pains", "Marche sur l'eau", "Résurrection de Lazare"],
+    "reference": "Jean 2, Matthieu 14, Jean 11"
+  },
+  {
+    "question": "Classez ces étapes de la mission des apôtres après la Pentecôte :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Pentecôte", "Conversion de Saul", "Premier concile de Jérusalem", "Voyages missionnaires de Paul"],
+    "correctAnswer": ["Pentecôte", "Conversion de Saul", "Premier concile de Jérusalem", "Voyages missionnaires de Paul"],
+    "reference": "Actes 2-15"
+  },
+  {
+    "question": "Classez ces lettres du Nouveau Testament dans l'ordre chronologique de leur écriture :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["1 Thessaloniciens", "1 Corinthiens", "Éphésiens", "2 Timothée"],
+    "correctAnswer": ["1 Thessaloniciens", "1 Corinthiens", "Éphésiens", "2 Timothée"],
+    "reference": "Datation des lettres de Paul"
+  },
+  {
+    "question": "Classez ces événements de la fin des temps selon l'Apocalypse :",
+    "type": "Chronologie",
+    "category": "Chronologie",
+    "options": ["Ouverture des sceaux", "Son des trompettes", "Coupes de la colère", "Retour de Christ"],
+    "correctAnswer": ["Ouverture des sceaux", "Son des trompettes", "Coupes de la colère", "Retour de Christ"],
+    "reference": "Apocalypse 6-19"
+  },
+  {
+    question: "Classez ces étapes de la vie de Moïse dans l'ordre chronologique :",
+    type: "Chronologie",
+    category: "Chronologie",
+    options: ["Fuite en Madian", "Ouverture de la mer Rouge", "Don des dix commandements", "Né dans un panier sur le Nil"],
+    correctAnswer: ["Né dans un panier sur le Nil", "Fuite en Madian", "Ouverture de la mer Rouge", "Don des dix commandements"],
+    reference: "Exode 2-20"
+  },
+];
 
 export default questionBank;

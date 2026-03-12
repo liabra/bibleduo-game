@@ -104,3 +104,109 @@ button:hover {
     opacity: 0;
   }
 }
+
+.app-footer {
+  text-align: center;
+  padding: 20px;
+  background: #282c34;
+  color: white;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.app-footer p {
+  margin: 5px 0;
+}
+
+.footer-link {
+  display: inline-block;
+  color: #61dafb;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Fixe le footer en bas de la page sans espace blanc */
+.app-footer {
+  text-align: center;
+  padding: 15px;
+  background: #282c34;
+  color: white;
+  font-size: 14px;
+  margin-top: auto; /* ✅ Permet de pousser le footer en bas */
+  width: 100%;
+  position: relative; /* ✅ Ajustement pour éviter les espaces */
+}
+
+/* ✅ Ajoute un style adapté aux petits écrans */
+@media screen and (max-width: 768px) {
+  .app-footer {
+    font-size: 12px; /* ✅ Réduction de la taille du texte */
+    padding: 10px; /* ✅ Moins d’espace */
+  }
+}
+
+/* ✅ Ajuste le lien des mises à jour pour le rendre plus visible */
+.footer-link {
+  display: block;
+  color: #61dafb;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 15px;
+  background: #282c34;
+  color: white;
+  font-size: 14px;
+  margin-top: auto;
+  width: 100%;
+  position: relative;
+}
+
+/* ✅ Style des liens du footer */
+.footer-links {
+  margin-top: 10px;
+}
+
+.footer-links a {
+  color: #61dafb;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 5px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Style pour le lien de mise à jour */
+.footer-link {
+  display: block;
+  color: #ff5555;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Adaptation pour mobile */
+@media screen and (max-width: 768px) {
+  .app-footer {
+    font-size: 12px;
+    padding: 10px;
+  }
+}

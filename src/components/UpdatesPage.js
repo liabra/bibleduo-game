@@ -14,9 +14,16 @@ const UpdatesPage = () => {
         <li>⏭ Ajout du bouton "Passer" pour sauter une question sans la compter.</li>
         <li>🎯 Amélioration de l'interface utilisateur avec des boutons stylisés.</li>
         <li>🛠 Organisation du code pour plus de clarté et modularité.</li>
-        <li>📋 Mise à jour de la questionBank avec des devinettes supplémentaires</li>
-        <li>🔄 Révision de l'affichage du quiz pour revenir à la version initiale</li>
-        <li>❌ Ajout d'un bouton quitter</li>
+        <li>📋 Mise à jour de la questionBank avec des devinettes supplémentaires.</li>
+        <li>🔄 Révision de l'affichage du quiz pour revenir à la version initiale.</li>
+        <li>❌ Ajout d'un bouton quitter.</li>
+        <li>🚀 Intégration des questions de type "Chronologie" avec Drag & Drop interactif.</li>
+        <li>🔁 Correction du bug empêchant la validation après modification de l'ordre.</li>
+        <li>💾 Ajout d'une tolérance orthographique pour les questions à "Complétion de Texte".</li>
+        <li>🟢🔴 Ajout d'une animation visuelle pour les bonnes et mauvaises réponses.</li>
+        <li>⏳ Ajout d'un passage automatique à la question suivante après validation.</li>
+        <li>🆕 Bouton "Suivant" ajouté pour permettre un passage manuel entre les questions.</li>
+        <li>🎨 Ajustement du style des feedbacks pour améliorer la lisibilité.</li>
       </ul>
       <Link to="/" className="back-button">Retour au Quiz</Link>
     </div>
