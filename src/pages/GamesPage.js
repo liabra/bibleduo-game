@@ -2,8 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { useGame } from '../context/GameContext';
 import BottomNav from '../components/BottomNav';
 import { GAMES_META } from '../data/gamesData';
-
-// One import per game — each lives in its own file
 import SpeedrunGame  from './games/SpeedrunGame';
 import BattleGame    from './games/BattleGame';
 import MemoryGame    from './games/MemoryGame';
@@ -12,7 +10,6 @@ import EscapeGame    from './games/EscapeGame';
 import SecretKeyGame from './games/SecretKeyGame';
 import { XPPop }     from './games/shared';
 
-// Map of game id → component
 const GAME_COMPONENTS = {
   speedrun:  SpeedrunGame,
   battle:    BattleGame,
@@ -23,17 +20,16 @@ const GAME_COMPONENTS = {
 };
 
 const GamesPage = () => {
-  const { recordQuizResult } = useGame();
-  const [activeGame, setActiveGame] = useState(null); // game id string or null
+  const { recordQuizResult, stats, level, xpProgress } = useGame();
+  const [activeGame, setActiveGame] = useState(null);
   const [xpPop, setXpPop] = useState(null);
 
   const handleXP = useCallback((xp) => {
-    // Feed XP into the main gamification engine
-    recordQuizResult({ correct: Math.ceil(xp / 10), total: Math.ceil(xp / 10), isDuo: false });
+    const correct = Math.max(1, Math.ceil(xp / 10));
+    recordQuizResult({ correct, total: correct });
     setXpPop(xp);
   }, [recordQuizResult]);
 
-  // Render the active game if one is selected
   if (activeGame) {
     const GameComponent = GAME_COMPONENTS[activeGame];
     return (
@@ -44,61 +40,87 @@ const GamesPage = () => {
     );
   }
 
-  // ─── HUB ─────────────────────────────────────────────────────────────────
   return (
-    <div className="page-content" style={{ maxWidth: 480, margin: '0 auto', padding: '1.5rem 1rem' }}>
+    <div className="page-content">
       {xpPop && <XPPop xp={xpPop} onDone={() => setXpPop(null)} />}
 
-      <h2 style={{ marginBottom: '.25rem' }}>🎮 Modes de Jeu</h2>
-      <p className="text-small mb-2">Choisissez votre aventure biblique</p>
+      {/* Header with XP */}
+      <div style={{ marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.6rem' }}>
+          <div>
+            <h2 style={{ fontSize: '1.55rem', marginBottom: '.1rem' }}>⚡ Bible Games</h2>
+            <p className="text-tiny">{stats.xp} XP total · {stats.totalQuizzes} parties</p>
+          </div>
+          <div style={{
+            background: 'rgba(201,168,76,.12)',
+            border: '1px solid rgba(201,168,76,.3)',
+            borderRadius: 12, padding: '.5rem .9rem', textAlign: 'center', minWidth: 52,
+          }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', color: 'var(--gold-light)', lineHeight: 1 }}>{level}</div>
+            <div className="text-tiny" style={{ marginTop: '.15rem' }}>niv.</div>
+          </div>
+        </div>
+        <div className="xp-bar-track">
+          <div className="xp-bar-fill" style={{ width: `${xpProgress}%` }} />
+        </div>
+        <div className="text-tiny" style={{ textAlign: 'right', marginTop: '.2rem' }}>
+          {xpProgress}/100 → Niv.{level + 1}
+        </div>
+      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.75rem' }}>
+      {/* Game grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.7rem', marginBottom: '1.25rem' }}>
         {GAMES_META.map(game => (
           <div
             key={game.id}
+            className="game-card"
             onClick={() => setActiveGame(game.id)}
-            className="card"
-            style={{
-              cursor: 'pointer', padding: '1.1rem',
-              borderColor: `${game.color}33`,
-              transition: 'all .2s', position: 'relative',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = `${game.color}66`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = `${game.color}33`; e.currentTarget.style.transform = 'none'; }}
+            style={{ '--c': game.color }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = `${game.color}55`}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(201,168,76,.15)'}
           >
-            <div style={{ fontSize: '2rem', marginBottom: '.4rem' }}>{game.icon}</div>
-            <div style={{ fontWeight: 700, fontSize: '.95rem', fontFamily: 'var(--font-display)', color: 'var(--parch)' }}>
+            {/* Top color stripe */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 3,
+              background: `linear-gradient(90deg, ${game.color}, ${game.color}55)`,
+              borderRadius: '14px 14px 0 0',
+            }} />
+            <div style={{ fontSize: '2rem', marginBottom: '.4rem', marginTop: '.2rem' }}>{game.icon}</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '.88rem', color: 'var(--parch)', marginBottom: '.2rem' }}>
               {game.label}
             </div>
-            <div className="text-small" style={{ margin: '.2rem 0 .5rem' }}>{game.desc}</div>
-            <span style={{
-              background: `${game.color}22`, border: `1px solid ${game.color}44`,
-              borderRadius: 99, padding: '.18rem .55rem', fontSize: '.65rem', color: game.color, fontWeight: 700,
-            }}>
-              {game.tag}
-            </span>
-            <div style={{ position: 'absolute', bottom: '.4rem', right: '.6rem', fontSize: '.6rem', color: 'var(--gray-400)' }}>
-              max {game.xpMax} XP
+            <div className="text-tiny" style={{ marginBottom: '.6rem', lineHeight: 1.45 }}>
+              {game.desc}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{
+                background: `${game.color}22`, border: `1px solid ${game.color}44`,
+                borderRadius: 99, padding: '.15rem .5rem',
+                fontSize: '.6rem', color: game.color, fontWeight: 700,
+              }}>{game.tag}</span>
+              <span className="text-tiny">{game.xpMax} XP</span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Seasonal event banner */}
+      {/* Seasonal banner */}
       <div style={{
-        marginTop: '1.5rem',
-        background: 'linear-gradient(135deg, rgba(139,26,26,.3), rgba(201,168,76,.15))',
-        border: '1px solid rgba(201,168,76,.25)', borderRadius: 14, padding: '1rem',
+        background: 'linear-gradient(135deg, rgba(139,26,26,.22), rgba(201,168,76,.08))',
+        border: '1px solid rgba(201,168,76,.2)', borderRadius: 14, padding: '1rem',
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ fontSize: '.65rem', color: 'var(--gold)', fontFamily: 'var(--font-display)', letterSpacing: '.1em', marginBottom: '.4rem' }}>
+        <div style={{ position: 'absolute', top: -4, right: 8, fontSize: '3.5rem', opacity: .07, lineHeight: 1 }}>⚔️</div>
+        <div className="text-tiny" style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)', letterSpacing: '.1em', marginBottom: '.35rem' }}>
           🎺 ÉVÉNEMENT SAISONNIER
         </div>
-        <div style={{ fontWeight: 700, color: 'var(--parch)', marginBottom: '.3rem' }}>⚔️ Défi Goliath — Boss Fight</div>
-        <div className="text-small" style={{ marginBottom: '.75rem' }}>
-          Répondez à 20 questions parfaites pour vaincre Goliath
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--parch)', marginBottom: '.25rem' }}>
+          Défi Goliath — Boss Fight
         </div>
-        <button className="btn btn-primary" style={{ fontSize: '.85rem', padding: '.5rem 1.2rem' }}
-          onClick={() => setActiveGame('speedrun')}>
+        <div className="text-small" style={{ marginBottom: '.75rem' }}>
+          60s · 20 réponses parfaites · Vaincs Goliath !
+        </div>
+        <button className="btn btn-primary" style={{ fontSize: '.85rem', padding: '.5rem 1.2rem' }} onClick={() => setActiveGame('speedrun')}>
           Relever le défi →
         </button>
       </div>

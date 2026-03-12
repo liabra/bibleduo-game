@@ -4,24 +4,25 @@ import { SPEEDRUN_QS } from '../../data/gamesData';
 import { shuffle } from './shared';
 
 const SpeedrunGame = ({ onBack, onXP }) => {
-  const [phase, setPhase] = useState('ready'); // ready | running | done
-  const [qs, setQs] = useState([]);
-  const [idx, setIdx] = useState(0);
-  const [input, setInput] = useState('');
-  const [score, setScore] = useState(0);
-  const [combo, setCombo] = useState(0);
+  const [phase, setPhase]       = useState('ready');
+  const [qs, setQs]             = useState([]);
+  const [idx, setIdx]           = useState(0);
+  const [input, setInput]       = useState('');
+  const [score, setScore]       = useState(0);
+  const [combo, setCombo]       = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [maxCombo, setMaxCombo] = useState(0);
-  const [flashes, setFlashes] = useState([]);
+  const [flash, setFlash]       = useState(null);
   const timerRef = useRef(null);
+  const xpFiredRef = useRef(false);
 
-  const addFlash = useCallback((text, color) => {
-    const id = Date.now();
-    setFlashes(f => [...f, { text, color, id }]);
-    setTimeout(() => setFlashes(f => f.filter(x => x.id !== id)), 800);
+  const showFlash = useCallback((text, color) => {
+    setFlash({ text, color });
+    setTimeout(() => setFlash(null), 700);
   }, []);
 
   const start = () => {
+    xpFiredRef.current = false;
     setQs(shuffle(SPEEDRUN_QS));
     setIdx(0); setScore(0); setCombo(0); setTimeLeft(60); setMaxCombo(0);
     setPhase('running');
@@ -40,120 +41,102 @@ const SpeedrunGame = ({ onBack, onXP }) => {
 
   const answer = useCallback((ans) => {
     const q = qs[idx % qs.length];
-    const correct = ans.trim().toLowerCase() === q.a.toLowerCase();
-    if (correct) {
+    const ok = ans.trim().toLowerCase() === q.a.toLowerCase();
+    if (ok) {
       const pts = 10 + combo * 5;
       setScore(s => s + pts);
       setCombo(c => { const n = c + 1; setMaxCombo(m => Math.max(m, n)); return n; });
-      addFlash(`+${pts} ✓`, '#40916c');
+      showFlash(`+${pts}`, '#40916c');
     } else {
       setCombo(0);
-      addFlash('✗', '#e63946');
+      showFlash('✗', '#e63946');
     }
     setInput('');
     setIdx(i => i + 1);
-  }, [qs, idx, combo, addFlash]);
+  }, [qs, idx, combo, showFlash]);
 
+  /* ── READY ── */
   if (phase === 'ready') return (
     <div className="page-content">
-      <button className="btn btn-ghost" onClick={onBack} style={{ marginBottom: '1rem' }}>← Retour</button>
-      <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+      <button className="btn btn-ghost" onClick={onBack}>← Retour</button>
+      <div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
         <div style={{ fontSize: '4rem' }}>⚡</div>
-        <h2>Bible Speedrun</h2>
-        <p className="text-small mt-1">60 secondes · Maximum de bonnes réponses · Combos explosifs</p>
+        <h2 style={{ margin: '.5rem 0 .3rem' }}>Bible Speedrun</h2>
+        <p className="text-small">60 secondes · Combos · Max de réponses</p>
       </div>
-      <div className="card" style={{ marginBottom: '1rem', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '.75rem', textAlign: 'center' }}>
-        {[['🕐', '60 secondes'], ['🔥', '+5 pts/combo'], ['⭐', 'XP selon score']].map(([icon, label]) => (
-          <div key={label}>
-            <div style={{ fontSize: '1.5rem' }}>{icon}</div>
-            <div className="text-small mt-1">{label}</div>
+      <div className="card" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', textAlign: 'center', gap: '.75rem', marginBottom: '1.5rem' }}>
+        {[['🕐','60s'], ['🔥','+5/combo'], ['⭐','XP bonus']].map(([ic,lb]) => (
+          <div key={lb}>
+            <div style={{ fontSize: '1.5rem' }}>{ic}</div>
+            <div className="text-tiny" style={{ marginTop: '.25rem' }}>{lb}</div>
           </div>
         ))}
       </div>
-      <button className="btn btn-primary w-full" style={{ padding: '1rem', fontSize: '1.1rem' }} onClick={start}>
-        🚀 Lancer !
-      </button>
+      <button className="btn btn-primary w-full" style={{ padding: '1rem', fontSize: '1.1rem' }} onClick={start}>🚀 Lancer !</button>
       <BottomNav />
     </div>
   );
 
+  /* ── DONE ── */
   if (phase === 'done') {
     const xp = Math.round(score * 0.8);
-    onXP(xp);
+    if (!xpFiredRef.current) { xpFiredRef.current = true; onXP(xp); }
     return (
       <div className="page-content" style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '3rem' }}>🏁</div>
-        <h2 style={{ color: 'var(--gold-light)', margin: '1rem 0' }}>Temps écoulé !</h2>
-        <div className="card-white" style={{ marginBottom: '1rem' }}>
-          {[['Score', `${score} pts`], ['Meilleur combo', `×${maxCombo}`], ['XP gagnés', `+${xp}`]].map(([l, v]) => (
-            <div key={l} style={{ display: 'flex', justifyContent: 'space-between', padding: '.5rem 0', borderBottom: '1px solid var(--gray-200)' }}>
+        <div style={{ fontSize: '3.5rem' }}>🏁</div>
+        <h2 style={{ margin: '.75rem 0 1.25rem' }}>Temps écoulé !</h2>
+        <div className="card-white" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+          {[['Score', `${score} pts`], ['Meilleur combo', `×${maxCombo}`], ['XP gagnés', `+${xp}`]].map(([l,v]) => (
+            <div key={l} style={{ display: 'flex', justifyContent: 'space-between', padding: '.6rem 0', borderBottom: '1px solid var(--gray-200)' }}>
               <span style={{ color: 'var(--ink-light)' }}>{l}</span>
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}>{v}</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--ink)' }}>{v}</span>
             </div>
           ))}
         </div>
-        <button className="btn btn-primary" onClick={() => setPhase('ready')} style={{ marginRight: '.5rem' }}>🔄 Rejouer</button>
-        <button className="btn btn-secondary" onClick={onBack}>← Menu</button>
+        <div style={{ display: 'flex', gap: '.75rem', justifyContent: 'center' }}>
+          <button className="btn btn-primary" onClick={start}>🔄 Rejouer</button>
+          <button className="btn btn-secondary" onClick={onBack}>← Menu</button>
+        </div>
         <BottomNav />
       </div>
     );
   }
 
+  /* ── PLAYING ── */
   const q = qs[idx % qs.length];
-  const timerColor = timeLeft <= 10 ? 'var(--crimson)' : timeLeft <= 20 ? 'orange' : 'var(--gold-light)';
-
+  const tc = timeLeft <= 10 ? '#e63946' : timeLeft <= 20 ? '#ff9f1c' : 'var(--gold-light)';
   return (
     <div className="page-content">
-      {flashes.map(f => (
-        <div key={f.id} style={{
-          position: 'fixed', top: '20%', left: '50%', transform: 'translateX(-50%)',
-          background: f.color, color: 'white', borderRadius: 8, padding: '.4rem 1rem',
-          fontWeight: 700, fontSize: '1.2rem', pointerEvents: 'none', zIndex: 99,
-        }}>{f.text}</div>
-      ))}
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.75rem' }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: timerColor, fontWeight: 700 }}>{timeLeft}s</div>
+      {flash && (
+        <div style={{ position: 'fixed', top: '18%', left: '50%', transform: 'translateX(-50%)', background: flash.color, color: 'white', borderRadius: 8, padding: '.4rem 1.2rem', fontWeight: 700, fontSize: '1.3rem', pointerEvents: 'none', zIndex: 99, animation: 'pop .25s ease both' }}>
+          {flash.text}
+        </div>
+      )}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.6rem' }}>
+        <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', color: tc, fontWeight: 700 }}>{timeLeft}s</div>
         <div style={{ textAlign: 'center' }}>
-          <div className="text-small">COMBO</div>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: combo > 0 ? 'orange' : 'var(--gray-400)' }}>×{combo}</div>
+          <div className="text-tiny">COMBO</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: combo > 0 ? '#ff9f1c' : 'var(--gray-400)' }}>×{combo}</div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div className="text-small">SCORE</div>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: 'var(--gold-light)' }}>{score}</div>
+          <div className="text-tiny">SCORE</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: 'var(--gold-light)' }}>{score}</div>
         </div>
       </div>
-
-      <div className="xp-bar-track" style={{ marginBottom: '1rem' }}>
-        <div className="xp-bar-fill" style={{ width: `${(timeLeft / 60) * 100}%`, background: timerColor, transition: 'width 1s linear, background .3s' }} />
+      <div className="xp-bar-track" style={{ marginBottom: '1rem', height: 8 }}>
+        <div className="xp-bar-fill" style={{ width: `${(timeLeft/60)*100}%`, background: tc, transition: 'width 1s linear, background .3s' }} />
       </div>
-
-      <div className="card-white" style={{ minHeight: 90, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--ink)' }}>{q?.q}</p>
+      <div className="card-white" style={{ minHeight: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--ink)', lineHeight: 1.5 }}>{q?.q}</p>
       </div>
-
       {q?.type === 'tf' ? (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.75rem' }}>
-          {q.opts.map(opt => (
-            <button key={opt} onClick={() => answer(opt)} style={{
-              padding: '1rem', fontSize: '1rem', borderRadius: 8, border: 'none', cursor: 'pointer',
-              fontWeight: 700, fontFamily: 'var(--font-display)',
-              background: opt === 'Vrai' ? 'var(--sage)' : 'var(--crimson)', color: 'white',
-            }}>{opt}</button>
-          ))}
+          <button onClick={() => answer('Vrai')} style={{ padding: '1rem', borderRadius: 8, border: 'none', background: 'var(--sage)', color: 'white', fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, cursor: 'pointer' }}>✓ Vrai</button>
+          <button onClick={() => answer('Faux')} style={{ padding: '1rem', borderRadius: 8, border: 'none', background: 'var(--crimson)', color: 'white', fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, cursor: 'pointer' }}>✗ Faux</button>
         </div>
       ) : (
         <div style={{ display: 'flex', gap: '.5rem' }}>
-          <input
-            value={input} onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && answer(input)}
-            autoFocus placeholder="Répondre..."
-            style={{
-              flex: 1, background: 'rgba(255,255,255,.08)',
-              border: '1.5px solid rgba(201,168,76,.3)', borderRadius: 8,
-              color: 'var(--parch)', padding: '.7rem 1rem', fontSize: '1rem', outline: 'none',
-            }}
-          />
+          <input className="game-input" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && answer(input)} autoFocus placeholder="Répondre..." />
           <button className="btn btn-primary" onClick={() => answer(input)}>→</button>
         </div>
       )}

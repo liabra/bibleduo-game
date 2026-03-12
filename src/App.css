@@ -1,212 +1,281 @@
+/* ── GOOGLE FONTS ─────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+
+/* ── VARIABLES ────────────────────────────────────────────────────────────── */
+:root {
+  --gold:         #c9a84c;
+  --gold-light:   #e8c97a;
+  --gold-dark:    #8b6914;
+  --parch:        #fdf6e3;
+  --ink:          #1a1209;
+  --ink-mid:      #2a1e0f;
+  --ink-light:    #6b4c32;
+  --azure:        #1e3a5f;
+  --sage:         #2d6a4f;
+  --sage-light:   #40916c;
+  --crimson:      #8b1a1a;
+  --gray-200:     #e8e2d4;
+  --gray-400:     #8a7060;
+  --font-display: 'Cinzel', Georgia, serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+  --radius:       12px;
+}
+
+/* ── BASE ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  min-height: 100%;
+  background: #0d0a05;
+  color: var(--parch);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
-  background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-  background-size: cover;
-  color: #333;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background-image:
+    radial-gradient(ellipse at 15% 20%, rgba(201,168,76,.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(30,58,95,.10)   0%, transparent 50%);
 }
 
-.App-header {
-  background-color: rgba(40, 44, 52, 0.8);
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--gold-light);
+  line-height: 1.2;
 }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.15rem; }
+p  { line-height: 1.6; }
 
-.App-header h1 {
-  font-size: 2.5em;
-  margin: 0;
-  color: white;
-}
+/* ── LAYOUT ───────────────────────────────────────────────────────────────── */
+.app-wrapper   { min-height: 100vh; display: flex; flex-direction: column; }
 
-.container {
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 600px;
-}
-
-input[type="text"] {
-  margin: 10px 0;
-  padding: 10px;
-  font-size: 1em;
+.page-content {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 5.5rem;
   width: 100%;
-  box-sizing: border-box;
+  min-height: 100vh;
 }
 
-input[type="adio"] {
-  margin: 10px 0;
-  padding: 10px;
-  font-size: 1em;
-  box-sizing: border-box;
+/* ── CARDS ────────────────────────────────────────────────────────────────── */
+.card {
+  background: rgba(253,246,227,.05);
+  border: 1px solid rgba(201,168,76,.18);
+  border-radius: var(--radius);
+  padding: 1rem;
 }
 
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 1em;
+.card-white {
+  background: var(--parch);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1rem;
+  color: var(--ink);
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.card-white p  { color: var(--ink-light); }
+.card-white h2,
+.card-white h3 { color: var(--ink); }
+
+/* ── GAME CARD (hub grid) ─────────────────────────────────────────────────── */
+.game-card {
+  background: rgba(253,246,227,.04);
+  border: 1.5px solid rgba(201,168,76,.15);
+  border-radius: 14px;
+  padding: 1.1rem;
   cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  background-color: #282c34;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #4f5d75;
-}
-
-.question-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.question-box {
-  text-align: left;
-  width: 100%;
-}
-
-.option {
-  display: block;
-  margin: 10px 0;
-}
-
-.navigation {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.timer {
-  font-weight: bold;
-}
-.timer.orange {
-  color: orange;
-}
-.timer.red {
-  color: red;
-  animation: blink 1s step-end infinite alternate;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-.app-footer {
-  text-align: center;
-  padding: 20px;
-  background: #282c34;
-  color: white;
-  font-size: 14px;
-  margin-top: 20px;
-}
-
-.app-footer p {
-  margin: 5px 0;
-}
-
-.footer-link {
-  display: inline-block;
-  color: #61dafb;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
-}
-
-/* ✅ Fixe le footer en bas de la page sans espace blanc */
-.app-footer {
-  text-align: center;
-  padding: 15px;
-  background: #282c34;
-  color: white;
-  font-size: 14px;
-  margin-top: auto; /* ✅ Permet de pousser le footer en bas */
-  width: 100%;
-  position: relative; /* ✅ Ajustement pour éviter les espaces */
-}
-
-/* ✅ Ajoute un style adapté aux petits écrans */
-@media screen and (max-width: 768px) {
-  .app-footer {
-    font-size: 12px; /* ✅ Réduction de la taille du texte */
-    padding: 10px; /* ✅ Moins d’espace */
-  }
-}
-
-/* ✅ Ajuste le lien des mises à jour pour le rendre plus visible */
-.footer-link {
-  display: block;
-  color: #61dafb;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
-}
-
-.app-footer {
-  text-align: center;
-  padding: 15px;
-  background: #282c34;
-  color: white;
-  font-size: 14px;
-  margin-top: auto;
-  width: 100%;
   position: relative;
+  overflow: hidden;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.game-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+.game-card:active { transform: scale(.97); }
+.game-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.03), transparent);
+  pointer-events: none;
 }
 
-/* ✅ Style des liens du footer */
-.footer-links {
-  margin-top: 10px;
+/* ── BUTTONS ──────────────────────────────────────────────────────────────── */
+button { cursor: pointer; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+  padding: .65rem 1.4rem; border-radius: 8px; border: none;
+  font-family: var(--font-display); font-weight: 700; font-size: .9rem;
+  cursor: pointer; transition: all .15s; text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), #a07830);
+  color: var(--ink);
+  box-shadow: 0 2px 12px rgba(201,168,76,.3);
+}
+.btn-primary:hover  { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(201,168,76,.4); }
+.btn-primary:active { transform: scale(.97); }
+
+.btn-secondary {
+  background: rgba(253,246,227,.1);
+  color: var(--parch);
+  border: 1px solid rgba(201,168,76,.25);
+}
+.btn-secondary:hover { background: rgba(253,246,227,.17); }
+
+.btn-ghost {
+  background: none; color: var(--gold);
+  border: none; padding: .4rem .5rem; font-size: .9rem;
+}
+.btn-ghost:hover { color: var(--gold-light); }
+
+.w-full { width: 100%; }
+
+/* ── INPUTS ───────────────────────────────────────────────────────────────── */
+.game-input {
+  flex: 1; width: 100%;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(201,168,76,.3);
+  border-radius: 8px;
+  color: var(--parch);
+  padding: .75rem 1rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color .2s;
+}
+.game-input:focus      { border-color: var(--gold); }
+.game-input.error      { border-color: var(--crimson); background: rgba(139,26,26,.1); }
+.game-input::placeholder { color: var(--gray-400); }
+
+/* ── XP BAR ───────────────────────────────────────────────────────────────── */
+.xp-bar-track {
+  height: 6px; background: rgba(255,255,255,.1);
+  border-radius: 99px; overflow: hidden;
+}
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 99px; transition: width .6s ease;
 }
 
-.footer-links a {
-  color: #61dafb;
-  text-decoration: none;
-  font-weight: bold;
-  margin: 0 5px;
+/* ── ANSWER OPTION BTN ────────────────────────────────────────────────────── */
+.answer-btn {
+  background: rgba(253,246,227,.5);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  padding: .7rem .75rem;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: .9rem;
+  cursor: pointer; text-align: left;
+  transition: all .12s; width: 100%;
+}
+.answer-btn:hover:not(:disabled) { background: var(--parch); border-color: var(--gold); }
+.answer-btn.correct { background: rgba(45,106,79,.2);  border-color: var(--sage);    color: #1a3d2b; }
+.answer-btn.wrong   { background: rgba(139,26,26,.2);  border-color: var(--crimson); color: #5a0e0e; }
+.answer-btn:disabled { cursor: default; }
+
+/* ── MEMORY CARD ──────────────────────────────────────────────────────────── */
+.memory-card {
+  min-height: 72px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: .3rem; font-size: .68rem; font-weight: 600;
+  cursor: pointer; transition: all .3s; user-select: none;
+  border: 1.5px solid rgba(201,168,76,.15);
+  background: rgba(201,168,76,.08); color: transparent;
+}
+.memory-card.flipped { background: var(--parch); border-color: var(--gold); color: var(--ink); }
+.memory-card.matched { background: rgba(45,106,79,.25); border-color: var(--sage); color: var(--sage-light); cursor: default; }
+
+/* ── BINGO CELL ───────────────────────────────────────────────────────────── */
+.bingo-cell {
+  border-radius: 6px; aspect-ratio: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: .15rem; cursor: pointer; transition: all .2s;
+  border: 1.5px solid rgba(201,168,76,.1); background: rgba(201,168,76,.05);
+}
+.bingo-cell.active    { background: rgba(201,168,76,.18); border-color: var(--gold); }
+.bingo-cell.completed { background: rgba(45,106,79,.2);   border-color: var(--sage); cursor: default; }
+
+/* ── BADGE PILL ───────────────────────────────────────────────────────────── */
+.badge-pill {
+  background: rgba(201,168,76,.15); border: 1px solid rgba(201,168,76,.35);
+  border-radius: 99px; padding: .2rem .65rem;
+  font-size: .72rem; color: var(--gold-light);
+  font-family: var(--font-display); font-weight: 600;
 }
 
-.footer-links a:hover {
-  text-decoration: underline;
+/* ── TYPOGRAPHY ───────────────────────────────────────────────────────────── */
+.text-small  { font-size: .8rem;  color: var(--gray-400); }
+.text-tiny   { font-size: .7rem;  color: var(--gray-400); }
+.text-gold   { color: var(--gold-light); }
+.text-center { text-align: center; }
+.mt-1 { margin-top: .4rem;  }
+.mt-2 { margin-top: .8rem;  }
+.mb-1 { margin-bottom: .4rem; }
+.mb-2 { margin-bottom: .8rem; }
+
+/* ── TOAST / XP POP ──────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; top: 12%; left: 50%; transform: translateX(-50%);
+  background: var(--ink-mid); border: 2px solid var(--gold);
+  border-radius: var(--radius); padding: 1rem 2rem;
+  z-index: 999; text-align: center;
+  animation: popIn .35s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6);
+  pointer-events: none;
 }
 
-/* ✅ Style pour le lien de mise à jour */
-.footer-link {
-  display: block;
-  color: #ff5555;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
+/* ── BOTTOM NAV ───────────────────────────────────────────────────────────── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(8,5,2,.97); backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(201,168,76,.18);
+  display: flex; justify-content: space-around; align-items: center;
+  padding: .5rem 0 .75rem; z-index: 100;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: .12rem;
+  color: rgba(201,168,76,.3); font-size: .62rem; font-family: var(--font-body);
+  text-decoration: none; padding: .3rem .8rem; border-radius: 8px;
+  transition: color .2s; -webkit-tap-highlight-color: transparent;
+}
+.nav-item.active { color: var(--gold-light); }
+.nav-item:hover  { color: var(--gold); }
+.nav-icon { font-size: 1.3rem; line-height: 1; }
+
+/* ── STEP PROGRESS (escape) ───────────────────────────────────────────────── */
+.step-bar { display: flex; gap: .35rem; margin-bottom: 1rem; }
+.step-dot {
+  flex: 1; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,.1); transition: background .3s;
+}
+.step-dot.done { background: var(--gold); }
+
+/* ── ANIMATIONS ───────────────────────────────────────────────────────────── */
+@keyframes popIn {
+  from { transform: translateX(-50%) scale(.7); opacity: 0; }
+  to   { transform: translateX(-50%) scale(1);  opacity: 1; }
+}
+@keyframes pop {
+  from { transform: scale(.75); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.footer-link:hover {
-  text-decoration: underline;
-}
-
-/* ✅ Adaptation pour mobile */
-@media screen and (max-width: 768px) {
-  .app-footer {
-    font-size: 12px;
-    padding: 10px;
-  }
-}
+/* ── SCROLLBAR ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,.25); border-radius: 2px; }

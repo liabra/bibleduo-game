@@ -2,15 +2,13 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  { path: '/',       icon: '🏠', label: 'Accueil' },
-  { path: '/quiz',   icon: '📖', label: 'Quiz' },
-  { path: '/games',  icon: '🎮', label: 'Jeux' },
-  { path: '/duo',    icon: '👥', label: 'Duo' },
-  { path: '/profil', icon: '🏅', label: 'Profil' },
+  { path: '/games',   icon: '🎮', label: 'Jeux' },
+  { path: '/updates', icon: '📰', label: 'Nouveautés' },
 ];
 
 const BottomNav = () => {
   const { pathname } = useLocation();
+  const isGames = pathname === '/' || pathname === '/games' || pathname.startsWith('/games/');
 
   return (
     <nav className="bottom-nav">
@@ -18,7 +16,7 @@ const BottomNav = () => {
         <Link
           key={path}
           to={path}
-          className={`nav-item ${pathname === path ? 'active' : ''}`}
+          className={`nav-item ${(path === '/games' && isGames) || pathname === path ? 'active' : ''}`}
         >
           <span className="nav-icon">{icon}</span>
           <span>{label}</span>
