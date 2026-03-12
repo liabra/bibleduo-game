@@ -1,6 +1,6 @@
 // src/SessionComponent.js
 import React, { useEffect, useState } from 'react';
-import QuestionsComponent from './QuestionsComponent';
+import QuestionsComponent from './components/QuestionsComponent';
 
 const SessionComponent = ({ sessionId }) => {
   const [session, setSession] = useState(null);
