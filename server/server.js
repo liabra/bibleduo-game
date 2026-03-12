@@ -24,7 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', userRoutes);
 
-// Servir le frontend React buildé
 app.use(express.static(path.join(__dirname, '../build')));
 
 app.get('*', (req, res) => {
