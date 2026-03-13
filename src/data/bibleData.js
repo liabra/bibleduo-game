@@ -1,7 +1,7 @@
 // ─── BIBLE LOUIS SEGOND 1910 (domaine public) ─────────────────────────────
 // Sélection représentative de versets pour la génération de questions
 
-export const BIBLE_VERSES = [
+const BIBLE_VERSES = [
   // Genèse
   { ref:"Genèse 1:1",     text:"Au commencement, Dieu créa les cieux et la terre.",           book:"Genèse",     testament:"AT" },
   { ref:"Genèse 1:27",    text:"Dieu créa l'homme à son image, il le créa à l'image de Dieu, il créa l'homme et la femme.", book:"Genèse", testament:"AT" },
@@ -105,7 +105,7 @@ export const BIBLE_VERSES = [
 
 // ─── KNOWLEDGE BASE for question generation ────────────────────────────────
 // Characters, events, numbers used across question templates
-export const BIBLE_FACTS = [
+const BIBLE_FACTS = [
   { question:"Qui a écrit la majorité des Psaumes ?",             answer:"David",         wrong:["Salomon","Moïse","Samuel"],            hint:"Roi-musicien d'Israël" },
   { question:"Combien de livres dans le Nouveau Testament ?",     answer:"27",            wrong:["24","30","33"],                        hint:"39 AT + 27 NT = 66" },
   { question:"Combien de livres dans l'Ancien Testament ?",       answer:"39",            wrong:["36","40","45"],                        hint:"39 AT + 27 NT = 66" },
@@ -135,7 +135,7 @@ export const BIBLE_FACTS = [
 
 // ─── FILL-IN-THE-BLANK GENERATOR ──────────────────────────────────────────
 // Creates completion questions from Bible verses
-export const generateVerseQuestion = (verse) => {
+const generateVerseQuestion = (verse) => {
   const words = verse.text.split(' ').filter(w => w.length > 4);
   if (words.length === 0) return null;
   // Pick a meaningful word (not the first 3 words)
@@ -154,7 +154,7 @@ export const generateVerseQuestion = (verse) => {
 };
 
 // ─── MULTIPLE CHOICE GENERATOR from BIBLE_FACTS ───────────────────────────
-export const generateFactQuestion = (fact, allFacts) => {
+const generateFactQuestion = (fact, allFacts) => {
   return {
     q:    fact.question,
     a:    fact.answer,
@@ -168,7 +168,7 @@ const shuffleArr = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
 // ─── QUESTION POOL BUILDER ─────────────────────────────────────────────────
 // Returns a fresh pool of N questions mixing verse completions + fact QCMs
-export const buildQuestionPool = (n = 20) => {
+const buildQuestionPool = (n = 20) => {
   const pool = [];
 
   // ~40% verse completion
@@ -186,3 +186,5 @@ export const buildQuestionPool = (n = 20) => {
 
   return shuffleArr(pool).slice(0, n);
 };
+
+module.exports = { BIBLE_VERSES, BIBLE_FACTS };
