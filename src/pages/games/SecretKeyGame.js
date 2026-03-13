@@ -25,9 +25,16 @@ const SecretKeyGame = ({ onBack, onXP }) => {
       setKeys(nk);
       setDone(true);
       setResult('ok');
+      // XP pour la clé du jour (+30)
       if (!xpFiredRef.current) { xpFiredRef.current = true; onXP(30); }
       if (nk >= 5) {
-        setTimeout(() => { setChestOpen(true); localStorage.setItem('bibleKeys', '0'); setKeys(0); }, 700);
+        setTimeout(() => {
+          setChestOpen(true);
+          localStorage.setItem('bibleKeys', '0');
+          setKeys(0);
+          // XP bonus coffre (+200) — distinct des 30 XP de la clé
+          onXP(200);
+        }, 700);
       }
     } else if (!ok) {
       setResult('err');

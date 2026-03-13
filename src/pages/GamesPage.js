@@ -36,11 +36,10 @@ const GamesPage = () => {
 
   if (activeGame) {
     const GameComponent = GAME_COMPONENTS[activeGame];
+    // XPPop intentionnellement absent ici : il s'affiche dans la grille au retour,
+    // évitant un double rendu toast (dans le jeu puis dans la grille).
     return (
-      <>
-        <GameComponent onBack={() => setActiveGame(null)} onXP={(xp) => handleXP(xp, activeGame)} />
-        {xpPop && <XPPop xp={xpPop} onDone={() => setXpPop(null)} />}
-      </>
+      <GameComponent onBack={() => setActiveGame(null)} onXP={(xp) => handleXP(xp, activeGame)} />
     );
   }
 

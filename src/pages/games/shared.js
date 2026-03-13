@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
 
 /**
- * Mélange simple d'un tableau.
- * Version rapide pour usage casual.
+ * Mélange Fisher-Yates — distribution uniforme garantie.
+ * Array.sort(() => Math.random() - 0.5) est biaisé ; cette version ne l'est pas.
  */
-export const shuffle = (arr = []) => [...arr].sort(() => Math.random() - 0.5);
+export const shuffle = (arr = []) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
 /**
  * Alias de compatibilité pour les composants qui importent encore shuffleOpts.

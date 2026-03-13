@@ -5,21 +5,25 @@ import { useGame } from '../../context/GameContext';
 import { SPEEDRUN_QS } from '../../data/gamesData';
 import { buildQuestionPool } from '../../data/bibleData';
 import { shuffle, shuffleOpts, PauseOverlay, HintBubble, ShareBtn, ScoreImageBtn } from './shared';
+import { fetchRandomQuestionsSafe } from '../../utils/questionsAPI';
 
-// Pool réellement différent à chaque appel
-const buildPool = () => {
+// ─── Pool local (fallback garanti) ─────────────────────────────────────────
+// Appelé en synchrone pour constituer la base locale.
+const buildLocalPool = () => {
   const base    = shuffle(SPEEDRUN_QS).map(shuffleOpts);
-  const dynamic = buildQuestionPool(20).map(q => ({ ...q, opts: q.opts ? shuffle(q.opts) : undefined }));
-  // Mélange total des deux sources, pas de slice fixe → vrai aléatoire
+  const dynamic = buildQuestionPool(20).map(q => ({
+    ...q,
+    opts: q.opts ? shuffle(q.opts) : undefined,
+  }));
   return shuffle([...base, ...dynamic]);
 };
 
 const SpeedrunGame = ({ onBack, onXP }) => {
   const { profile } = useGame();
 
-  // ── Phase "prêt" : choix mode correction ───────────────────────────────
-  const [phase, setPhase]       = useState('choose'); // choose | ready | running | done
-  const [correctionMode, setCorrectionMode] = useState('immediate'); // immediate | recap
+  // ── Phase : choose → ready → loading → running → done ──────────────────
+  const [phase, setPhase]                   = useState('choose');
+  const [correctionMode, setCorrectionMode] = useState('immediate');
 
   const [qs, setQs]             = useState([]);
   const [idx, setIdx]           = useState(0);
@@ -35,6 +39,8 @@ const SpeedrunGame = ({ onBack, onXP }) => {
   const [history, setHistory]   = useState([]);
   const [showScoreCard, setShowScoreCard]   = useState(false);
   const [copied, setCopied]     = useState(false);
+  // Indique la source des questions (pour info dans l'UI)
+  const [apiCount, setApiCount] = useState(0);
 
   const timerRef = useRef(null);
   const xpRef    = useRef(false);
@@ -44,15 +50,27 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     setTimeout(() => setFlash(null), 700);
   }, []);
 
-  const start = useCallback(() => {
+  // ── Démarrage : fetch API (2 s max), merge avec local ─────────────────
+  const start = useCallback(async () => {
     xpRef.current = false;
-    // Nouveau pool à chaque partie → questions différentes
-    setQs(buildPool());
+    setPhase('loading');
+    setApiCount(0);
+
+    // fetchRandomQuestionsSafe ne lève jamais d'erreur : retourne [] si échec
+    const apiQuestions = await fetchRandomQuestionsSafe({ limit: 20, timeoutMs: 2000 });
+    setApiCount(apiQuestions.length);
+
+    const local = buildLocalPool();
+    // On mélange tout : questions locales + questions MongoDB
+    const allQuestions = shuffle([...local, ...apiQuestions]);
+
+    setQs(allQuestions);
     setIdx(0); setScore(0); setCombo(0); setTimeLeft(60); setMaxCombo(0);
     setHistory([]); setShowCorrection(null); setShowHint(false);
     setPhase('running');
   }, []);
 
+  // ── Timer ───────────────────────────────────────────────────────────────
   useEffect(() => {
     if (phase !== 'running' || paused) return;
     timerRef.current = setInterval(() => {
@@ -64,6 +82,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     return () => clearInterval(timerRef.current);
   }, [phase, paused]);
 
+  // ── Validation d'une réponse ─────────────────────────────────────────
   const answer = useCallback((ans) => {
     if (showCorrection) return;
     const q  = qs[idx % qs.length];
@@ -95,7 +114,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     navigator.clipboard?.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
 
-  // ── CHOIX MODE CORRECTION ──────────────────────────────────────────────
+  // ── CHOIX MODE CORRECTION ────────────────────────────────────────────
   if (phase === 'choose') return (
     <div className="page-content">
       <button className="btn btn-ghost" onClick={onBack}>← Retour</button>
@@ -143,7 +162,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     </div>
   );
 
-  // ── READY ──────────────────────────────────────────────────────────────
+  // ── READY ────────────────────────────────────────────────────────────
   if (phase === 'ready') return (
     <div className="page-content">
       <button className="btn btn-ghost" onClick={() => setPhase('choose')}>← Retour</button>
@@ -164,7 +183,19 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     </div>
   );
 
-  // ── DONE ───────────────────────────────────────────────────────────────
+  // ── LOADING ──────────────────────────────────────────────────────────
+  // S'affiche max 2 s (timeout API), puis la partie démarre automatiquement.
+  if (phase === 'loading') return (
+    <div className="page-content" style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'60vh', gap:'1rem' }}>
+      <div style={{ fontSize:'2.5rem' }}>⚡</div>
+      <p className="text-small">Chargement des questions…</p>
+      <div style={{ width:48, height:4, borderRadius:99, background:'rgba(201,168,76,.15)', overflow:'hidden' }}>
+        <div style={{ height:'100%', background:'var(--gold)', borderRadius:99, animation:'loading-bar 1.5s ease-in-out infinite' }} />
+      </div>
+    </div>
+  );
+
+  // ── DONE ─────────────────────────────────────────────────────────────
   if (phase === 'done') {
     const xp      = Math.round(score * 0.8);
     const correct = history.filter(h => h.ok).length;
@@ -189,6 +220,12 @@ const SpeedrunGame = ({ onBack, onXP }) => {
         <div style={{ textAlign:'center', marginBottom:'1.25rem' }}>
           <div style={{ fontSize:'3rem' }}>🏁</div>
           <h2 style={{ margin:'.5rem 0' }}>Temps écoulé !</h2>
+          {/* Indicateur source — visible uniquement quand des questions API ont été chargées */}
+          {apiCount > 0 && (
+            <div className="text-tiny" style={{ color:'var(--gold)', marginTop:'.25rem' }}>
+              ✦ {apiCount} question{apiCount > 1 ? 's' : ''} depuis la base en ligne
+            </div>
+          )}
         </div>
 
         <div className="card-white" style={{ marginBottom:'1rem' }}>
@@ -200,7 +237,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
           ))}
         </div>
 
-        {/* Révision erreurs (toujours visible en fin) */}
+        {/* Révision des erreurs */}
         {wrong.length > 0 && (
           <div className="card" style={{ marginBottom:'1rem' }}>
             <div style={{ fontFamily:'var(--font-display)', color:'var(--gold-light)', marginBottom:'.5rem', fontSize:'.9rem' }}>
@@ -229,7 +266,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     );
   }
 
-  // ── RUNNING ────────────────────────────────────────────────────────────
+  // ── RUNNING ──────────────────────────────────────────────────────────
   const q  = qs[idx % qs.length];
   const tc = timeLeft <= 10 ? '#e63946' : timeLeft <= 20 ? '#ff9f1c' : 'var(--gold-light)';
 
