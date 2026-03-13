@@ -117,10 +117,25 @@ const BattleGame = ({ onBack, onXP }) => {
       <div className="card" style={{ marginBottom:'1.25rem' }}>
         <p style={{ fontFamily:'var(--font-display)', color:'var(--gold-light)', fontSize:'.9rem', marginBottom:'.75rem' }}>📋 Mode de correction</p>
         {[
-          { key:'immediate', icon:'⚡', title:'Correction immédiate', desc:'La bonne réponse s'affiche 1.4s après chaque erreur' },
+          { key:'immediate', icon:'⚡', title:'Correction immédiate', desc:"La bonne réponse s'affiche 1.4s après chaque erreur" },
           { key:'recap',     icon:'📝', title:'Résumé en fin',        desc:'Toutes les erreurs visibles uniquement en fin de partie' },
         ].map(({ key, icon, title, desc }) => (
-          <div key={key} onClick={() => setCorrectionMode(key)} style={{ display:'flex', alignItems:'flex-start', gap:'.75rem', padding:'.75rem', borderRadius:10, marginBottom:'.5rem', cursor:'pointer', background:correctionMode===key?'rgba(201,168,76,.15)':'rgba(255,255,255,.03)', border:`1.5px solid ${correctionMode===key?'rgba(201,168,76,.5)':'rgba(255,255,255,.06)'}`, transition:'all .2s' }}>
+          <div
+            key={key}
+            onClick={() => setCorrectionMode(key)}
+            style={{
+              display:'flex',
+              alignItems:'flex-start',
+              gap:'.75rem',
+              padding:'.75rem',
+              borderRadius:10,
+              marginBottom:'.5rem',
+              cursor:'pointer',
+              background:correctionMode===key ? 'rgba(201,168,76,.15)' : 'rgba(255,255,255,.03)',
+              border:`1.5px solid ${correctionMode===key ? 'rgba(201,168,76,.5)' : 'rgba(255,255,255,.06)'}`,
+              transition:'all .2s'
+            }}
+          >
             <div style={{ fontSize:'1.4rem', flexShrink:0 }}>{icon}</div>
             <div>
               <div style={{ fontFamily:'var(--font-display)', color:'var(--parch)', fontSize:'.9rem', fontWeight:700 }}>{title}</div>
