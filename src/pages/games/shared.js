@@ -14,9 +14,16 @@ export const shuffle = (arr = []) => {
 };
 
 /**
- * Alias de compatibilité pour les composants qui importent encore shuffleOpts.
+ * Mélange les options (opts) d'une question et retourne la question.
+ * NE PAS aliaser à shuffle() : shuffle() opère sur des tableaux,
+ * shuffleOpts() opère sur des objets-question.
+ *
+ * Usage : questions.map(shuffleOpts)
  */
-export const shuffleOpts = shuffle;
+export const shuffleOpts = (q) => ({
+  ...q,
+  opts: Array.isArray(q.opts) ? shuffle(q.opts) : q.opts,
+});
 
 /**
  * Retourne un élément aléatoire d'un tableau.

@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useGame } from '../context/GameContext';
 import BottomNav from '../components/BottomNav';
 import ProfileSetup from '../components/ProfileSetup';
+import ProfileView  from '../components/ProfileView';
 import { GAMES_META } from '../data/gamesData';
 import SpeedrunGame  from './games/SpeedrunGame';
 import BattleGame    from './games/BattleGame';
@@ -20,11 +21,20 @@ const GAME_COMPONENTS = {
   secretkey: SecretKeyGame,
 };
 
+// profileModal :
+//   null    → grille principale
+//   'setup' → premier paramétrage (onboarding, pas de retour vers ProfileView)
+//   'view'  → consultation du profil (stats + actions)
+//   'edit'  → modification pseudo/avatar (retour vers ProfileView après)
+
 const GamesPage = () => {
   const { recordQuizResult, stats, level, xpProgress, profile } = useGame();
-  const [activeGame, setActiveGame]     = useState(null);
-  const [xpPop, setXpPop]               = useState(null);
-  const [showProfile, setShowProfile]   = useState(!profile.setupDone);
+
+  const [activeGame, setActiveGame] = useState(null);
+  const [xpPop,      setXpPop]      = useState(null);
+  const [profileModal, setProfileModal] = useState(
+    profile.setupDone ? null : 'setup'
+  );
 
   const handleXP = useCallback((xp, gameId = '') => {
     const correct = Math.max(1, Math.ceil(xp / 10));
@@ -32,28 +42,53 @@ const GamesPage = () => {
     setXpPop(xp);
   }, [recordQuizResult]);
 
-  if (showProfile) return <ProfileSetup onDone={() => setShowProfile(false)} />;
-
-  if (activeGame) {
-    const GameComponent = GAME_COMPONENTS[activeGame];
-    // XPPop intentionnellement absent ici : il s'affiche dans la grille au retour,
-    // évitant un double rendu toast (dans le jeu puis dans la grille).
+  // ── Modales profil ────────────────────────────────────────────────────
+  if (profileModal === 'view') {
     return (
-      <GameComponent onBack={() => setActiveGame(null)} onXP={(xp) => handleXP(xp, activeGame)} />
+      <ProfileView
+        onClose={() => setProfileModal(null)}
+        onEdit={()  => setProfileModal('edit')}
+      />
     );
   }
 
+  if (profileModal === 'setup' || profileModal === 'edit') {
+    return (
+      <ProfileSetup
+        // Après setup initial → grille | Après édition → retour vers la vue profil
+        onDone={() => setProfileModal(profileModal === 'edit' ? 'view' : null)}
+      />
+    );
+  }
+
+  // ── Jeu actif ─────────────────────────────────────────────────────────
+  if (activeGame) {
+    const GameComponent = GAME_COMPONENTS[activeGame];
+    // XPPop absent ici intentionnellement : il s'affiche dans la grille au retour,
+    // évitant un double rendu toast.
+    return (
+      <GameComponent
+        onBack={() => setActiveGame(null)}
+        onXP={(xp) => handleXP(xp, activeGame)}
+      />
+    );
+  }
+
+  // ── Grille principale ─────────────────────────────────────────────────
   return (
     <div className="page-content">
       {xpPop && <XPPop xp={xpPop} onDone={() => setXpPop(null)} />}
 
-      {/* Profile header */}
+      {/* En-tête profil */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>
+          {/* Cliquer sur l'avatar → vue profil (pas le setup) */}
           <button
-            onClick={() => setShowProfile(true)}
+            onClick={() => setProfileModal('view')}
             style={{ fontSize: '1.8rem', background: 'rgba(201,168,76,.12)', border: '1px solid rgba(201,168,76,.25)', borderRadius: 10, width: 44, height: 44, cursor: 'pointer' }}
-          >{profile.avatar}</button>
+          >
+            {profile.avatar}
+          </button>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '.95rem', color: 'var(--parch)', fontWeight: 700 }}>
               {profile.name || 'Anonyme'}
@@ -67,7 +102,7 @@ const GamesPage = () => {
         </div>
       </div>
 
-      {/* XP bar */}
+      {/* Barre XP */}
       <div className="xp-bar-track" style={{ marginBottom: '.3rem' }}>
         <div className="xp-bar-fill" style={{ width: `${xpProgress}%` }} />
       </div>
@@ -77,7 +112,7 @@ const GamesPage = () => {
 
       <h2 style={{ fontSize: '1.4rem', marginBottom: '.75rem' }}>⚡ Bible Games</h2>
 
-      {/* Game grid */}
+      {/* Grille des jeux */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.65rem', marginBottom: '1.25rem' }}>
         {GAMES_META.map(game => (
           <div
@@ -99,7 +134,7 @@ const GamesPage = () => {
         ))}
       </div>
 
-      {/* Seasonal event */}
+      {/* Événement saisonnier */}
       <div style={{ background: 'linear-gradient(135deg, rgba(139,26,26,.22), rgba(201,168,76,.08))', border: '1px solid rgba(201,168,76,.2)', borderRadius: 14, padding: '1rem', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -4, right: 8, fontSize: '3.5rem', opacity: .07, lineHeight: 1 }}>⚔️</div>
         <div className="text-tiny" style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)', letterSpacing: '.1em', marginBottom: '.3rem' }}>🎺 ÉVÉNEMENT SAISONNIER</div>
