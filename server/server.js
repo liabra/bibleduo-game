@@ -29,7 +29,7 @@ app.use('/api', questionRoutes);
 
 app.use(express.static(path.join(__dirname, '../build')));
 
-// Fix Express 5 : '/{*path}' remplace '*'
+// Fix Express 5 : '/{*path}' remplaceeee '*'
 app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
