@@ -1,5 +1,5 @@
 /* ── GOOGLE FONTS ─────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap');
 
 /* ── VARIABLES ────────────────────────────────────────────────────────────── */
 :root {
@@ -21,7 +21,7 @@
   --radius:       12px;
 }
 
-/* ── BASE ─────────────────────────────────────────────────────────────────── */
+/* ── RESET ────────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body, #root {
@@ -47,7 +47,7 @@ h2 { font-size: 1.5rem; }
 h3 { font-size: 1.15rem; }
 p  { line-height: 1.6; }
 
-/* ── LAYOUT ───────────────────────────────────────────────────────────────── */
+/* ── APP ──────────────────────────────────────────────────────────────────── */
 .app-wrapper   { min-height: 100vh; display: flex; flex-direction: column; }
 
 .page-content {
@@ -74,11 +74,11 @@ p  { line-height: 1.6; }
   color: var(--ink);
   box-shadow: 0 4px 20px rgba(0,0,0,.3);
 }
-.card-white p  { color: var(--ink-light); }
+.card-white p          { color: var(--ink-light); }
 .card-white h2,
-.card-white h3 { color: var(--ink); }
+.card-white h3         { color: var(--ink); }
 
-/* ── GAME CARD (hub grid) ─────────────────────────────────────────────────── */
+/* ── GAME CARD (hub) ──────────────────────────────────────────────────────── */
 .game-card {
   background: rgba(253,246,227,.04);
   border: 1.5px solid rgba(201,168,76,.15);
@@ -93,10 +93,9 @@ p  { line-height: 1.6; }
 .game-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
 .game-card:active { transform: scale(.97); }
 .game-card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.03), transparent);
-  pointer-events: none;
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg,rgba(255,255,255,.03),transparent);
+  pointer-events:none;
 }
 
 /* ── BUTTONS ──────────────────────────────────────────────────────────────── */
@@ -106,7 +105,7 @@ button { cursor: pointer; }
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
   padding: .65rem 1.4rem; border-radius: 8px; border: none;
   font-family: var(--font-display); font-weight: 700; font-size: .9rem;
-  cursor: pointer; transition: all .15s; text-decoration: none;
+  cursor: pointer; transition: all .15s;
   -webkit-tap-highlight-color: transparent;
 }
 .btn-primary {
@@ -116,6 +115,7 @@ button { cursor: pointer; }
 }
 .btn-primary:hover  { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(201,168,76,.4); }
 .btn-primary:active { transform: scale(.97); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
 .btn-secondary {
   background: rgba(253,246,227,.1);
@@ -145,8 +145,8 @@ button { cursor: pointer; }
   outline: none;
   transition: border-color .2s;
 }
-.game-input:focus      { border-color: var(--gold); }
-.game-input.error      { border-color: var(--crimson); background: rgba(139,26,26,.1); }
+.game-input:focus { border-color: var(--gold); }
+.game-input.error { border-color: var(--crimson); background: rgba(139,26,26,.1); }
 .game-input::placeholder { color: var(--gray-400); }
 
 /* ── XP BAR ───────────────────────────────────────────────────────────────── */
@@ -160,7 +160,7 @@ button { cursor: pointer; }
   border-radius: 99px; transition: width .6s ease;
 }
 
-/* ── ANSWER OPTION BTN ────────────────────────────────────────────────────── */
+/* ── ANSWER BTNS ──────────────────────────────────────────────────────────── */
 .answer-btn {
   background: rgba(253,246,227,.5);
   border: 1.5px solid var(--gray-200);
@@ -173,13 +173,13 @@ button { cursor: pointer; }
   transition: all .12s; width: 100%;
 }
 .answer-btn:hover:not(:disabled) { background: var(--parch); border-color: var(--gold); }
-.answer-btn.correct { background: rgba(45,106,79,.2);  border-color: var(--sage);    color: #1a3d2b; }
+.answer-btn.correct { background: rgba(45,106,79,.2);  border-color: var(--sage);    color: #0f3d22; }
 .answer-btn.wrong   { background: rgba(139,26,26,.2);  border-color: var(--crimson); color: #5a0e0e; }
 .answer-btn:disabled { cursor: default; }
 
-/* ── MEMORY CARD ──────────────────────────────────────────────────────────── */
+/* ── MEMORY ───────────────────────────────────────────────────────────────── */
 .memory-card {
-  min-height: 72px; border-radius: 8px;
+  min-height: 70px; border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   text-align: center; padding: .3rem; font-size: .68rem; font-weight: 600;
   cursor: pointer; transition: all .3s; user-select: none;
@@ -189,7 +189,7 @@ button { cursor: pointer; }
 .memory-card.flipped { background: var(--parch); border-color: var(--gold); color: var(--ink); }
 .memory-card.matched { background: rgba(45,106,79,.25); border-color: var(--sage); color: var(--sage-light); cursor: default; }
 
-/* ── BINGO CELL ───────────────────────────────────────────────────────────── */
+/* ── BINGO ────────────────────────────────────────────────────────────────── */
 .bingo-cell {
   border-radius: 6px; aspect-ratio: 1;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -199,7 +199,7 @@ button { cursor: pointer; }
 .bingo-cell.active    { background: rgba(201,168,76,.18); border-color: var(--gold); }
 .bingo-cell.completed { background: rgba(45,106,79,.2);   border-color: var(--sage); cursor: default; }
 
-/* ── BADGE PILL ───────────────────────────────────────────────────────────── */
+/* ── BADGES ───────────────────────────────────────────────────────────────── */
 .badge-pill {
   background: rgba(201,168,76,.15); border: 1px solid rgba(201,168,76,.35);
   border-radius: 99px; padding: .2rem .65rem;
@@ -217,7 +217,7 @@ button { cursor: pointer; }
 .mb-1 { margin-bottom: .4rem; }
 .mb-2 { margin-bottom: .8rem; }
 
-/* ── TOAST / XP POP ──────────────────────────────────────────────────────── */
+/* ── TOAST ────────────────────────────────────────────────────────────────── */
 .toast {
   position: fixed; top: 12%; left: 50%; transform: translateX(-50%);
   background: var(--ink-mid); border: 2px solid var(--gold);
@@ -246,7 +246,7 @@ button { cursor: pointer; }
 .nav-item:hover  { color: var(--gold); }
 .nav-icon { font-size: 1.3rem; line-height: 1; }
 
-/* ── STEP PROGRESS (escape) ───────────────────────────────────────────────── */
+/* ── STEP PROGRESS ────────────────────────────────────────────────────────── */
 .step-bar { display: flex; gap: .35rem; margin-bottom: 1rem; }
 .step-dot {
   flex: 1; height: 4px; border-radius: 2px;

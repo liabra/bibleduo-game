@@ -13,6 +13,7 @@ function App() {
           <Route path="/"        element={<GamesPage />} />
           <Route path="/games"   element={<GamesPage />} />
           <Route path="/updates" element={<UpdatesPage />} />
+          {/* Catch-all — prevents white screen on unknown routes */}
           <Route path="*"        element={<GamesPage />} />
         </Routes>
       </div>
