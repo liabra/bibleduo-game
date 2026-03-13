@@ -12,6 +12,7 @@
     "dotenv": "^17.3.1",
     "express": "^5.1.0",
     "mongoose": "^8.19.1",
+    "qrcode": "^1.5.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.28.0",
@@ -23,12 +24,15 @@
     "typescript": "^4.9.5"
   },
   "scripts": {
-  "start": "node server/server.js",
-  "client": "cd client && npm start",
-  "server": "node server/server.js",
-  "dev": "concurrently \"npm run server\" \"npm run client\"",
-  "build": "react-scripts build"
-},
+    "start": "node server/server.js",
+    "client": "cd client && npm start",
+    "server": "node server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "react-scripts build",
+    "db:generate": "node server/scripts/generateQuestions.js",
+    "db:generate:approve": "node server/scripts/generateQuestions.js --auto-approve",
+    "db:approve-all": "node server/scripts/approveAll.js"
+  },
   "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [

@@ -53,10 +53,13 @@ const PERSONNAGES_POOL = [
 ];
 
 // ─── ARGUMENTS CLI ────────────────────────────────────────────────────────────
-const args      = process.argv.slice(2);
-const DRY_RUN   = args.includes("--dry-run");
+const args         = process.argv.slice(2);
+const DRY_RUN      = args.includes("--dry-run");
 const ONLY_FACTS   = args.includes("--only-facts");
 const ONLY_VERSES  = args.includes("--only-verses");
+// Approuve immédiatement les questions générées depuis les versets (status: "approved")
+// Usage : node generateQuestions.js --auto-approve
+const AUTO_APPROVE = args.includes("--auto-approve");
 
 // ─── GÉNÉRATION DEPUIS UN VERSET ─────────────────────────────────────────────
 
@@ -186,6 +189,7 @@ async function main() {
   console.log(`  Versets   : ${BIBLE_VERSES.length}`);
   console.log(`  Facts     : ${BIBLE_FACTS.length}`);
   console.log(`  Sources   : ${ONLY_FACTS ? "BIBLE_FACTS seulement" : ONLY_VERSES ? "BIBLE_VERSES seulement" : "les deux"}`);
+  console.log(`  Approbation versets : ${AUTO_APPROVE ? "✅ auto-approve (status: approved)" : "📝 draft (approbation manuelle requise)"}`);
 
   // ── Connexion MongoDB ─────────────────────────────────────────────────
   if (!DRY_RUN) {
@@ -219,7 +223,10 @@ async function main() {
       const vBatchId = `${batchId}-verse-${i + 1}`;
 
       // Générer toutes les questions possibles pour ce verset
-      const brutes = genererDepuisVerset(verse, tousLesLivres, vBatchId);
+      let brutes = genererDepuisVerset(verse, tousLesLivres, vBatchId);
+      if (AUTO_APPROVE) {
+        brutes = brutes.map(q => ({ ...q, status: "approved" }));
+      }
       totalGenerees += brutes.length;
 
       // Valider + dédupliquer dans le lot

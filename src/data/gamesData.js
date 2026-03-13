@@ -58,19 +58,28 @@ export const SPEEDRUN_QS = [
 ];
 
 // ─── MEMORY PAIRS ─────────────────────────────────────────────────────────────
+// Pool de 20 paires — MemoryGame en tire 8 aléatoirement à chaque partie.
 export const MEMORY_PAIRS = [
-  { a: "Noé 🚢",      b: "Arche & Déluge" },
-  { a: "David 🗡️",    b: "Goliath & Fronde" },
-  { a: "Jonas 🐋",    b: "3 jours dans le poisson" },
-  { a: "Moïse ✋",    b: "Mer Rouge séparée" },
-  { a: "Salomon 👑",  b: "Temple de Jérusalem" },
-  { a: "Abraham ⭐",  b: "Père des nations" },
-  { a: "Marie 🌹",    b: "Mère de Jésus" },
-  { a: "Paul ✉️",     b: "Épîtres aux Églises" },
-  { a: "Daniel 🦁",   b: "Fosse aux lions" },
-  { a: "Élie ⚡",     b: "Char de feu au ciel" },
-  { a: "Esther 👸",   b: "Reine qui sauva son peuple" },
-  { a: "Ruth 🌾",     b: "Fidélité à Naomi" },
+  { a: "Noé 🚢",         b: "Arche & Déluge" },
+  { a: "David 🗡️",       b: "Goliath & Fronde" },
+  { a: "Jonas 🐋",       b: "3 jours dans le poisson" },
+  { a: "Moïse ✋",       b: "Mer Rouge séparée" },
+  { a: "Salomon 👑",     b: "Temple de Jérusalem" },
+  { a: "Abraham ⭐",     b: "Père des nations" },
+  { a: "Marie 🌹",       b: "Mère de Jésus" },
+  { a: "Paul ✉️",        b: "Épîtres aux Églises" },
+  { a: "Daniel 🦁",      b: "Fosse aux lions" },
+  { a: "Élie ⚡",        b: "Char de feu au ciel" },
+  { a: "Esther 👸",      b: "Reine qui sauva son peuple" },
+  { a: "Ruth 🌾",        b: "Fidélité à Naomi" },
+  { a: "Joseph 🌈",      b: "Vendu en Égypte" },
+  { a: "Jean-Baptiste 💧", b: "Baptême dans le Jourdain" },
+  { a: "Judas 💰",       b: "30 pièces d'argent" },
+  { a: "Pierre 🔑",      b: "Clés du Royaume" },
+  { a: "Samson 💪",      b: "Force dans les cheveux" },
+  { a: "Josué 📯",       b: "Murailles de Jéricho" },
+  { a: "Matthieu 🪙",    b: "Collecteur d'impôts" },
+  { a: "Thomas 🖐️",      b: "Le doigt dans les plaies" },
 ];
 
 // ─── BINGO CHALLENGES ─────────────────────────────────────────────────────────
@@ -100,6 +109,26 @@ export const BINGO_CHALLENGES = [
   { icon:"💧", label:"Eau",         q:"Jésus a changé l'eau en vin à la noce de ___",                    a:"Cana",                  type:"text", hint:"Village de Galilée, premier miracle" },
   { icon:"🔑", label:"Clé",         q:"Les clés du Royaume ont été données à ?",                         a:"Pierre",                type:"mc",   opts:["Pierre","Paul","Jean","Jacques"],                             hint:"Jésus lui dit 'tu es Pierre et sur ce roc...'" },
   { icon:"🆓", label:"LIBRE",       q:"Case gratuite !",                                                  a:"OK",                    type:"free", hint:"" },
+  // ── Défis supplémentaires (pool 44 → grille variée à chaque partie) ─────────
+  { icon:"📅", label:"Chiffre",     q:"Combien d'années les Hébreux ont-ils erré dans le désert ?",       a:"40",                    type:"text", hint:"Même chiffre que le jeûne de Jésus" },
+  { icon:"🌿", label:"Plante",      q:"Sous quel arbre Élie s'est-il couché épuisé ?",                    a:"Genévrier",             type:"mc",   opts:["Genévrier","Olivier","Palmier","Figuier"],                    hint:"Un arbre du désert" },
+  { icon:"🏞️", label:"Lieu",        q:"Sur quelle montagne Moïse reçut-il les 10 commandements ?",        a:"Sinaï",                 type:"mc",   opts:["Sinaï","Carmel","Horeb","Hermon"],                            hint:"Montagne du désert arabique" },
+  { icon:"🐴", label:"Animal",      q:"Sur quel animal Jésus est-il entré à Jérusalem ?",                 a:"Ânon",                  type:"mc",   opts:["Ânon","Cheval","Chameau","Mulet"],                            hint:"Petit âne n'ayant jamais été monté" },
+  { icon:"🔥", label:"Feu",         q:"Combien d'hommes Dieu jeta-t-il dans la fournaise avec Schadrac ?",a:"0",                     type:"mc",   opts:["0","1","2","3"],                                              hint:"Personne n'a été jeté — c'est Nébucadnetsar qui les a jetés" },
+  { icon:"🌙", label:"Prophète",    q:"Quel prophète fut transporté par les cheveux jusqu'à Babylone ?",  a:"Ézéchiel",              type:"mc",   opts:["Ézéchiel","Jérémie","Amos","Daniel"],                         hint:"Il eut aussi la vision de la roue" },
+  { icon:"✏️", label:"Auteur",      q:"Qui a écrit le livre de l'Ecclésiaste ?",                          a:"Salomon",               type:"mc",   opts:["Salomon","David","Moïse","Ézra"],                             hint:"'Vanité des vanités, tout est vanité'" },
+  { icon:"🎶", label:"Musique",     q:"Quel instrument jouait David pour apaiser le roi Saül ?",          a:"Harpe",                 type:"mc",   opts:["Harpe","Flûte","Trompette","Luth"],                           hint:"Instrument à cordes" },
+  { icon:"🌊", label:"Fleuve",      q:"Dans quel fleuve Jean-Baptiste baptisait-il ?",                    a:"Jourdain",              type:"mc",   opts:["Jourdain","Nil","Euphrate","Sihor"],                          hint:"Fleuve qui coule vers la mer Morte" },
+  { icon:"📍", label:"Lieu",        q:"À quelle ville appartenait Marie-Madeleine ?",                     a:"Magdala",               type:"mc",   opts:["Magdala","Béthanie","Nazareth","Capharnaüm"],                 hint:"Son nom vient de cette ville" },
+  { icon:"🕰️", label:"Temps",       q:"À quel âge Abraham eut-il Isaac ?",                               a:"100",                   type:"text", hint:"Sara avait 90 ans" },
+  { icon:"👶", label:"Naissance",   q:"Qui a été sauvé dans un panier de roseaux sur le Nil ?",           a:"Moïse",                 type:"mc",   opts:["Moïse","Samuel","Samson","Élie"],                             hint:"Sa mère le cacha pour le protéger du pharaon" },
+  { icon:"🌾", label:"Récolte",     q:"Ruth glana dans les champs de quel homme ?",                       a:"Boaz",                  type:"mc",   opts:["Boaz","Elimélec","Kilion","Mahlon"],                          hint:"Il deviendra son mari et l'ancêtre de David" },
+  { icon:"⚓", label:"Voyage",      q:"Vers quelle ville Paul naviguait-il lors du naufrage ?",            a:"Rome",                  type:"mc",   opts:["Rome","Corinthe","Éphèse","Malte"],                           hint:"Il devait comparaître devant César" },
+  { icon:"🏛️", label:"Lieu",        q:"Sur quelle colline Paul prêcha-t-il à Athènes ?",                  a:"Aréopage",              type:"mc",   opts:["Aréopage","Acropole","Parthénon","Olympe"],                   hint:"Lieu de délibération des Athéniens" },
+  { icon:"🎯", label:"Précis",      q:"Combien d'hommes Gédéon avait-il dans son armée finale ?",         a:"300",                   type:"text", hint:"Dieu réduisit l'armée jusqu'à ce petit nombre" },
+  { icon:"💎", label:"Trésor",      q:"Quel est le livre biblique connu pour ses paraboles de sagesse ?", a:"Proverbes",             type:"mc",   opts:["Proverbes","Ecclésiaste","Job","Psaumes"],                    hint:"Attribué à Salomon, fils de David" },
+  { icon:"🌟", label:"Étoile",      q:"À quelle nation appartenait Corneille, premier converti non-juif ?", a:"Rome",                type:"mc",   opts:["Rome","Grèce","Éthiopie","Égypte"],                          hint:"Il était centurion romain" },
+  { icon:"🔔", label:"Temple",      q:"Quel prêtre entendit la voix de Dieu appeler Samuel de nuit ?",    a:"Éli",                   type:"mc",   opts:["Éli","Zacharie","Aaron","Nadab"],                             hint:"Samuel pensait que c'était lui qui l'appelait" },
 ];
 
 // ─── ESCAPE LEVELS ────────────────────────────────────────────────────────────

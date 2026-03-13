@@ -164,22 +164,31 @@ const generateFactQuestion = (fact, allFacts) => {
   };
 };
 
-const shuffleArr = (arr) => [...arr].sort(() => Math.random() - 0.5);
+// Fisher-Yates — distribution uniforme (remplace le sort biaisé)
+const shuffleArr = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
 // ─── QUESTION POOL BUILDER ─────────────────────────────────────────────────
-// Returns a fresh pool of N questions mixing verse completions + fact QCMs
+// Returns a fresh pool of N questions mixing verse completions + fact QCMs.
+// Exportée nommément pour être importée dans les jeux React.
 const buildQuestionPool = (n = 20) => {
   const pool = [];
 
-  // ~40% verse completion
-  const verses = [...BIBLE_VERSES].sort(() => Math.random() - 0.5).slice(0, Math.ceil(n * 0.4));
+  // ~40% complétion de versets
+  const verses = shuffleArr(BIBLE_VERSES).slice(0, Math.ceil(n * 0.4));
   for (const v of verses) {
     const q = generateVerseQuestion(v);
     if (q) pool.push(q);
   }
 
-  // ~60% fact QCMs
-  const facts = [...BIBLE_FACTS].sort(() => Math.random() - 0.5).slice(0, Math.ceil(n * 0.6));
+  // ~60% QCM depuis les faits bibliques
+  const facts = shuffleArr(BIBLE_FACTS).slice(0, Math.ceil(n * 0.6));
   for (const f of facts) {
     pool.push(generateFactQuestion(f));
   }
@@ -187,4 +196,7 @@ const buildQuestionPool = (n = 20) => {
   return shuffleArr(pool).slice(0, n);
 };
 
-module.exports = { BIBLE_VERSES, BIBLE_FACTS };
+// ─── EXPORTS ───────────────────────────────────────────────────────────────
+// module.exports (CommonJS) : compatible avec le require() du serveur Node.js
+// ET avec les import ES modules via webpack/react-scripts (nommés depuis module.exports).
+module.exports = { BIBLE_VERSES, BIBLE_FACTS, buildQuestionPool };

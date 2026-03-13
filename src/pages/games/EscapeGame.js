@@ -10,6 +10,7 @@ const EscapeGame = ({ onBack, onXP }) => {
   const [phase, setPhase]           = useState('intro'); // intro | playing | code | solved
   const [hint, setHint]             = useState(false);
   const [result, setResult]         = useState(null); // 'ok' | 'err' | null
+  const [codeError, setCodeError]   = useState(false);
   const [cleared, setCleared]       = useState([]);
   const xpFiredRef = React.useRef(false);
 
@@ -41,6 +42,9 @@ const EscapeGame = ({ onBack, onXP }) => {
       setCleared(c => [...c, levelIdx]);
       if (!xpFiredRef.current) { xpFiredRef.current = true; onXP(level.xp); }
       setPhase('solved');
+    } else {
+      setCodeError(true);
+      setTimeout(() => { setCodeError(false); setCodeInput(''); }, 1200);
     }
   };
 
@@ -94,17 +98,45 @@ const EscapeGame = ({ onBack, onXP }) => {
   if (phase === 'code') return (
     <div className="page-content" style={{ textAlign: 'center' }}>
       <div style={{ fontSize: '3rem', marginBottom: '.5rem' }}>🔐</div>
-      <h3 style={{ marginBottom: '.5rem' }}>Entrez le code secret</h3>
-      <p className="text-small" style={{ marginBottom: '1.5rem' }}>Un mot-clé de l'histoire du niveau…</p>
+      <h3 style={{ marginBottom: '.75rem' }}>Entrez le code secret</h3>
+
+      {/* Indice explicite du code */}
+      <div className="card" style={{ background: 'rgba(201,168,76,.1)', borderColor: 'rgba(201,168,76,.4)', marginBottom: '1.25rem', textAlign: 'left' }}>
+        <div style={{ fontFamily: 'var(--font-display)', color: 'var(--gold)', fontSize: '.75rem', letterSpacing: '.08em', marginBottom: '.35rem' }}>💡 INDICE</div>
+        <p style={{ color: 'var(--parch)', fontSize: '.95rem', lineHeight: 1.5 }}>{level.codeHint}</p>
+        <p className="text-tiny" style={{ marginTop: '.4rem' }}>
+          {'_'.repeat(level.code.length).split('').join(' ')} &nbsp;·&nbsp; {level.code.length} lettres
+        </p>
+      </div>
+
       <input
         value={codeInput}
-        onChange={e => setCodeInput(e.target.value.toUpperCase())}
+        onChange={e => { setCodeInput(e.target.value.toUpperCase()); setCodeError(false); }}
         onKeyDown={e => e.key === 'Enter' && checkCode()}
-        placeholder="_ _ _ _"
-        maxLength={8}
-        style={{ width: '100%', textAlign: 'center', background: 'rgba(255,255,255,.08)', border: '2px solid rgba(201,168,76,.4)', borderRadius: 8, color: 'var(--parch)', padding: '.75rem', fontSize: '1.5rem', fontFamily: 'var(--font-display)', letterSpacing: '.3em', outline: 'none', marginBottom: '1rem' }}
+        placeholder={'_'.repeat(level.code.length).split('').join(' ')}
+        maxLength={level.code.length}
+        style={{
+          width: '100%', textAlign: 'center',
+          background: codeError ? 'rgba(139,26,26,.15)' : 'rgba(255,255,255,.08)',
+          border: `2px solid ${codeError ? 'var(--crimson)' : 'rgba(201,168,76,.4)'}`,
+          borderRadius: 8, color: 'var(--parch)',
+          padding: '.75rem', fontSize: '1.5rem',
+          fontFamily: 'var(--font-display)', letterSpacing: '.3em',
+          outline: 'none', marginBottom: '.5rem',
+          transition: 'border-color .2s, background .2s',
+          animation: codeError ? 'shake .4s ease' : 'none',
+        }}
       />
-      <button className="btn btn-primary w-full" onClick={checkCode}>Ouvrir la porte 🚪</button>
+
+      {codeError && (
+        <p style={{ color: 'var(--crimson)', fontSize: '.85rem', marginBottom: '.75rem' }}>
+          ❌ Code incorrect — réessayez…
+        </p>
+      )}
+
+      <button className="btn btn-primary w-full" style={{ marginTop: '.5rem' }} onClick={checkCode}>
+        Ouvrir la porte 🚪
+      </button>
       <BottomNav />
     </div>
   );
