@@ -3,7 +3,7 @@ import BottomNav from '../../components/BottomNav';
 import ScoreCard from '../../components/ScoreCard';
 import { useGame } from '../../context/GameContext';
 import { MEMORY_PAIRS } from '../../data/gamesData';
-import { shuffle, ShareBtn, ScoreImageBtn } from './shared';
+import { shuffle, ShareBtn, ScoreImageBtn, RulesBtn } from './shared';
 
 // ── Fix : shuffle complet des PAIRES à chaque partie, pas slice fixe ──────────
 // On prend les 12 paires et on les mélange vraiment, puis on tire 8 différentes
@@ -121,7 +121,10 @@ const MemoryBoard = ({ onBack, onXP, onReplay }) => {
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.75rem' }}>
         <button className="btn btn-ghost" onClick={onBack}>← Retour</button>
         <span style={{ fontFamily:'var(--font-display)', color:'var(--gold-light)', fontSize:'.9rem' }}>BIBLE MEMORY</span>
-        <span style={{ fontFamily:'var(--font-display)', color:'var(--gold-light)', fontSize:'.9rem' }}>{moves} coups</span>
+        <div style={{ display:'flex', gap:'.4rem', alignItems:'center' }}>
+          <span style={{ fontFamily:'var(--font-display)', color:'var(--gold-light)', fontSize:'.9rem' }}>{moves} coups</span>
+          <RulesBtn gameId="memory" />
+        </div>
       </div>
 
       {/* Feedback mauvaise paire */}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { SECRET_KEY_VERSES } from '../../data/gamesData';
+import { RulesBtn } from './shared';
 
 const TODAY = new Date().toDateString();
 
@@ -44,7 +45,10 @@ const SecretKeyGame = ({ onBack, onXP }) => {
 
   return (
     <div className="page-content">
-      <button className="btn btn-ghost" onClick={onBack} style={{ marginBottom: '.75rem' }}>← Retour</button>
+      <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center', marginBottom: '.75rem' }}>
+        <button className="btn btn-ghost" onClick={onBack}>← Retour</button>
+        <RulesBtn gameId="secretkey" />
+      </div>
 
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <div style={{ fontSize: '3rem' }}>🗝️</div>

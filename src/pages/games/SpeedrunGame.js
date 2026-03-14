@@ -4,7 +4,7 @@ import ScoreCard from '../../components/ScoreCard';
 import { useGame, HINT_COSTS } from '../../context/GameContext';
 import { SPEEDRUN_QS } from '../../data/gamesData';
 import { buildQuestionPool } from '../../data/bibleData';
-import { shuffle, shuffleOpts, PauseOverlay, HintBubble, ShareBtn, ScoreImageBtn, BibleRef } from './shared';
+import { shuffle, shuffleOpts, PauseOverlay, HintBubble, ShareBtn, ScoreImageBtn, BibleRef, RulesBtn } from './shared';
 import { fetchRandomQuestionsSafe } from '../../utils/questionsAPI';
 
 // ─── Pool local (fallback garanti) ─────────────────────────────────────────
@@ -291,6 +291,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
             <div className="text-tiny">SCORE</div>
             <div style={{ fontFamily:'var(--font-display)', fontSize:'1.4rem', color:'var(--gold-light)' }}>{score}</div>
           </div>
+          <RulesBtn gameId="speedrun" />
           <button onClick={() => setPaused(true)} style={{ background:'rgba(255,255,255,.08)', border:'1px solid rgba(255,255,255,.1)', borderRadius:6, color:'var(--parch)', cursor:'pointer', padding:'.3rem .5rem', fontSize:'.85rem' }}>⏸</button>
         </div>
       </div>

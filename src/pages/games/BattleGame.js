@@ -12,6 +12,7 @@ import {
   ShareBtn,
   ScoreImageBtn,
   BibleRef,
+  RulesBtn,
 } from './shared';
 
 const buildPool = () => {
@@ -542,19 +543,21 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
           <div className="text-tiny">
             Q{idx + 1}/{qs.length}
           </div>
-          <button
-            onClick={() => setPaused(true)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--gray-400)',
-              cursor: 'pointer',
-              fontSize: '.8rem',
-              marginTop: '.2rem'
-            }}
-          >
-            ⏸
-          </button>
+          <div style={{ display: 'flex', gap: '.3rem', alignItems: 'center', justifyContent: 'center', marginTop: '.2rem' }}>
+            <button
+              onClick={() => setPaused(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--gray-400)',
+                cursor: 'pointer',
+                fontSize: '.8rem',
+              }}
+            >
+              ⏸
+            </button>
+            <RulesBtn gameId="battle" />
+          </div>
         </div>
 
         <div

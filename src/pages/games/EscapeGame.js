@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { ESCAPE_LEVELS } from '../../data/gamesData';
 import { useGame } from '../../context/GameContext';
-import { BibleRef } from './shared';
+import { BibleRef, RulesBtn } from './shared';
 import { HINT_COSTS } from '../../context/GameContext';
 
 const EscapeGame = ({ onBack, onXP }) => {
-  const { stats, spendXP, addEscapeBadge } = useGame();
+  const { stats, spendXP, addEscapeBadge, escapeBadges } = useGame();
   const [levelIdx, setLevelIdx]     = useState(0);
   const [enigmaIdx, setEnigmaIdx]   = useState(0);
   const [input, setInput]           = useState('');
@@ -15,7 +15,9 @@ const EscapeGame = ({ onBack, onXP }) => {
   const [hint, setHint]             = useState(false);
   const [result, setResult]         = useState(null); // 'ok' | 'err' | null
   const [codeError, setCodeError]   = useState(false);
-  const [cleared, setCleared]       = useState([]);
+  // Restaure les niveaux complétés depuis les badges persistés
+  // badge.id est 1-based (Niv.1 = id:1), l'index dans ESCAPE_LEVELS est 0-based
+  const [cleared, setCleared]       = useState(() => escapeBadges.map(b => b.id - 1));
   const xpFiredRef = React.useRef(false);
 
   const level  = ESCAPE_LEVELS[levelIdx];
@@ -63,6 +65,35 @@ const EscapeGame = ({ onBack, onXP }) => {
       <button className="btn btn-ghost" onClick={onBack} style={{ marginBottom: '.75rem' }}>← Retour</button>
       <h2 style={{ marginBottom: '.25rem' }}>🔐 Bible Escape</h2>
       <p className="text-tiny" style={{ marginBottom: '1rem' }}>⭐ {stats.xp} XP disponibles</p>
+      {/* Grille de progression des badges */}
+      <div className="card" style={{ marginBottom: '1rem', background: 'rgba(201,168,76,.05)', borderColor: 'rgba(201,168,76,.18)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.6rem' }}>
+          <div style={{ fontFamily: 'var(--font-display)', color: 'var(--gold)', fontSize: '.78rem', letterSpacing: '.07em' }}>
+            🏅 MES BADGES
+          </div>
+          <div className="text-tiny">{cleared.length}/{ESCAPE_LEVELS.length} débloqués</div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '.35rem' }}>
+          {ESCAPE_LEVELS.map((l, i) => {
+            const earned = cleared.includes(i);
+            return (
+              <div key={l.id} title={earned ? `${l.title} — ${l.reward}` : `Niveau ${l.id} verrouillé`} style={{
+                borderRadius: 8, padding: '.35rem .2rem', textAlign: 'center',
+                background: earned ? 'rgba(201,168,76,.15)' : 'rgba(255,255,255,.04)',
+                border: `1px solid ${earned ? 'rgba(201,168,76,.4)' : 'rgba(255,255,255,.06)'}`,
+                transition: 'all .2s',
+              }}>
+                <div style={{ fontSize: '1.1rem', lineHeight: 1, filter: earned ? 'none' : 'grayscale(1)', opacity: earned ? 1 : 0.35 }}>
+                  {earned ? l.icon : '🔒'}
+                </div>
+                <div style={{ fontSize: '.52rem', color: earned ? 'var(--gold-light)' : 'var(--gray-400)', marginTop: '.2rem', fontFamily: 'var(--font-display)' }}>
+                  {l.id}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
       {ESCAPE_LEVELS.map((l, i) => {
         const unlocked = i <= cleared.length;
         const done     = cleared.includes(i);
@@ -186,7 +217,10 @@ const EscapeGame = ({ onBack, onXP }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.75rem' }}>
         <button className="btn btn-ghost" onClick={() => setPhase('intro')}>← Niveaux</button>
         <span className="badge-pill">{level.icon} {level.title}</span>
-        <span className="text-small">{enigmaIdx+1}/{level.enigmas.length}</span>
+        <div style={{ display: 'flex', gap: '.4rem', alignItems: 'center' }}>
+          <span className="text-small">{enigmaIdx+1}/{level.enigmas.length}</span>
+          <RulesBtn gameId="escape" />
+        </div>
       </div>
 
       {/* Step dots */}

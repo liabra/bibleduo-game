@@ -3,7 +3,7 @@ import BottomNav from '../../components/BottomNav';
 import { BINGO_CHALLENGES } from '../../data/gamesData';
 import ScoreCard from '../../components/ScoreCard';
 import { useGame, HINT_COSTS } from '../../context/GameContext';
-import { shuffle, HintBubble, PauseOverlay, ShareBtn, ScoreImageBtn, BibleRef } from './shared';
+import { shuffle, HintBubble, PauseOverlay, ShareBtn, ScoreImageBtn, BibleRef, RulesBtn } from './shared';
 
 // ── makeGrid : 24 défis + case libre, plus une réserve pour rotation ─────────
 // Quand une mauvaise réponse est donnée, la case reçoit un défi de la réserve.
@@ -125,6 +125,7 @@ const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
         <span style={{ fontFamily:'var(--font-display)', color:'var(--gold-light)', fontSize:'.9rem' }}>BIBLE BINGO</span>
         <div style={{ display:'flex', gap:'.4rem', alignItems:'center' }}>
           <span style={{ color:'var(--sage-light)', fontFamily:'var(--font-display)', fontWeight:700, fontSize:'.9rem' }}>+{xpTotal} XP</span>
+          <RulesBtn gameId="bingo" />
           <button onClick={() => setPaused(true)} style={{ background:'rgba(255,255,255,.08)', border:'1px solid rgba(255,255,255,.1)', borderRadius:6, color:'var(--parch)', cursor:'pointer', padding:'.25rem .45rem', fontSize:'.8rem' }}>⏸</button>
         </div>
       </div>

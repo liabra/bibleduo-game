@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { path: '/games',   icon: '🎮', label: 'Jeux' },
   { path: '/updates', icon: '📰', label: 'Nouveautés' },
   { path: '/about',   icon: '✦',  label: 'À propos' },
+  { path: '/rules',   icon: '📋', label: 'Notice' },
 ];
 
 const BottomNav = () => {
@@ -30,16 +31,6 @@ const BottomNav = () => {
           </button>
         );
       })}
-      <a
-        href="https://topbible.topchretien.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="nav-item"
-        style={{ textDecoration: 'none', color: 'var(--gold)', opacity: .75 }}
-      >
-        <span className="nav-icon">📖</span>
-        <span style={{ fontSize: '.62rem' }}>Bible</span>
-      </a>
     </nav>
   );
 };
