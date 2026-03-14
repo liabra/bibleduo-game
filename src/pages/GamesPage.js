@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useGame } from '../context/GameContext';
 import BottomNav from '../components/BottomNav';
 import ProfileSetup from '../components/ProfileSetup';
@@ -28,13 +29,26 @@ const GAME_COMPONENTS = {
 //   'edit'  → modification pseudo/avatar (retour vers ProfileView après)
 
 const GamesPage = () => {
-  const { recordQuizResult, stats, level, xpProgress, profile } = useGame();
+  const { recordQuizResult, stats, level, xpProgress, xpCurrent, xpNeeded, profile } = useGame();
+  const location = useLocation();
 
   const [activeGame, setActiveGame] = useState(null);
   const [xpPop,      setXpPop]      = useState(null);
   const [profileModal, setProfileModal] = useState(
     profile.setupDone ? null : 'setup'
   );
+
+  // Correction navigation : quand le joueur clique "Jeux" depuis un jeu actif,
+  // React Router ne remonte pas GamesPage (même route). On écoute location.key
+  // pour détecter la navigation et revenir à la grille.
+  const mountedRef = useRef(false);
+  useEffect(() => {
+    if (mountedRef.current) {
+      setActiveGame(null);
+      setXpPop(null);
+    }
+    mountedRef.current = true;
+  }, [location.key]);
 
   const handleXP = useCallback((xp, gameId = '') => {
     const correct = Math.max(1, Math.ceil(xp / 10));
@@ -55,7 +69,7 @@ const GamesPage = () => {
   if (profileModal === 'setup' || profileModal === 'edit') {
     return (
       <ProfileSetup
-        // Après setup initial → grille | Après édition → retour vers la vue profil
+        isEdit={profileModal === 'edit'}
         onDone={() => setProfileModal(profileModal === 'edit' ? 'view' : null)}
       />
     );
@@ -107,7 +121,7 @@ const GamesPage = () => {
         <div className="xp-bar-fill" style={{ width: `${xpProgress}%` }} />
       </div>
       <div className="text-tiny" style={{ textAlign: 'right', marginBottom: '1.25rem' }}>
-        {xpProgress}/100 → Niv.{level + 1}
+        {xpCurrent}/{xpNeeded} XP → Niv.{level + 1}
       </div>
 
       <h2 style={{ fontSize: '1.4rem', marginBottom: '.75rem' }}>⚡ Bible Games</h2>

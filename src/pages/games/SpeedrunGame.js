@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import BottomNav from '../../components/BottomNav';
 import ScoreCard from '../../components/ScoreCard';
-import { useGame } from '../../context/GameContext';
+import { useGame, HINT_COSTS } from '../../context/GameContext';
 import { SPEEDRUN_QS } from '../../data/gamesData';
 import { buildQuestionPool } from '../../data/bibleData';
-import { shuffle, shuffleOpts, PauseOverlay, HintBubble, ShareBtn, ScoreImageBtn } from './shared';
+import { shuffle, shuffleOpts, PauseOverlay, HintBubble, ShareBtn, ScoreImageBtn, BibleRef } from './shared';
 import { fetchRandomQuestionsSafe } from '../../utils/questionsAPI';
 
 // ─── Pool local (fallback garanti) ─────────────────────────────────────────
@@ -19,7 +19,7 @@ const buildLocalPool = () => {
 };
 
 const SpeedrunGame = ({ onBack, onXP }) => {
-  const { profile } = useGame();
+  const { profile, spendXP } = useGame();
 
   // ── Phase : choose → ready → loading → running → done ──────────────────
   const [phase, setPhase]                   = useState('choose');
@@ -87,7 +87,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
     if (showCorrection) return;
     const q  = qs[idx % qs.length];
     const ok = ans.trim().toLowerCase() === String(q.a || q.opts?.[0] || '').toLowerCase();
-    setHistory(h => [...h, { q: q.q, a: q.a, given: ans, ok }]);
+    setHistory(h => [...h, { q: q.q, a: q.a, given: ans, ok, ref: q.ref }]);
 
     if (ok) {
       const pts = 10 + combo * 5;
@@ -99,7 +99,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
       setCombo(0);
       addFlash('✗', '#e63946');
       if (correctionMode === 'immediate') {
-        setShowCorrection({ q: q.q, correct: q.a, given: ans });
+        setShowCorrection({ q: q.q, correct: q.a, given: ans, ref: q.ref });
         setTimeout(() => { setShowCorrection(null); setInput(''); setIdx(i => i + 1); setShowHint(false); }, 2000);
       } else {
         setInput(''); setIdx(i => i + 1); setShowHint(false);
@@ -250,6 +250,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
                   <span style={{ color:'#e63946' }}>✗ {w.given || '(vide)'}</span>
                   <span style={{ color:'var(--sage-light)' }}>✓ {w.a}</span>
                 </div>
+                {w.ref && <BibleRef ref={w.ref} />}
               </div>
             ))}
           </div>
@@ -305,6 +306,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
           <p style={{ fontSize:'.85rem', color:'var(--ink-light)', marginBottom:'.25rem' }}>{showCorrection.q}</p>
           <p style={{ color:'var(--crimson)', fontSize:'.85rem' }}>Répondu : <b>{showCorrection.given || '(vide)'}</b></p>
           <p style={{ color:'var(--sage)', fontSize:'.9rem', fontWeight:700 }}>✓ {showCorrection.correct}</p>
+          {showCorrection.ref && <BibleRef ref={showCorrection.ref} />}
         </div>
       ) : (
         <>
@@ -312,7 +314,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
             <p style={{ fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--ink)', lineHeight:1.5 }}>{q?.q}</p>
           </div>
           {showHint && q?.hint && <HintBubble hint={q.hint} />}
-          {!showHint && q?.hint && <button className="btn btn-ghost" style={{ fontSize:'.8rem', marginBottom:'.5rem' }} onClick={() => setShowHint(true)}>💡 Indice</button>}
+          {!showHint && q?.hint && <button className="btn btn-ghost" style={{ fontSize:'.8rem', marginBottom:'.5rem' }} onClick={() => { setShowHint(true); spendXP(HINT_COSTS.speedrun); }}>💡 Indice <span style={{ color:'var(--crimson)', fontSize:'.7rem' }}>−{HINT_COSTS.speedrun} XP</span></button>}
           {q?.type === 'tf' ? (
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'.75rem', marginTop:'.5rem' }}>
               <button onClick={() => answer('Vrai')} style={{ padding:'1rem', borderRadius:8, border:'none', background:'var(--sage)', color:'white', fontFamily:'var(--font-display)', fontWeight:700, cursor:'pointer' }}>✓ Vrai</button>

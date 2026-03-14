@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { BINGO_CHALLENGES } from '../../data/gamesData';
 import ScoreCard from '../../components/ScoreCard';
-import { useGame } from '../../context/GameContext';
-import { shuffle, HintBubble, PauseOverlay, ShareBtn, ScoreImageBtn } from './shared';
+import { useGame, HINT_COSTS } from '../../context/GameContext';
+import { shuffle, HintBubble, PauseOverlay, ShareBtn, ScoreImageBtn, BibleRef } from './shared';
 
 // ── makeGrid : 24 défis + case libre, plus une réserve pour rotation ─────────
 // Quand une mauvaise réponse est donnée, la case reçoit un défi de la réserve.
@@ -27,7 +27,7 @@ const checkBingo = (completed) => {
 
 // Composant interne réinitialisé via key à chaque "Rejouer"
 const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
-  const { profile } = useGame();
+  const { profile, spendXP } = useGame();
   const [grid, setGrid]             = useState(makeGrid);   // { cells, reserve }
   const cells = grid.cells;
   const [completed, setCompleted]   = useState(new Set([12]));
@@ -141,6 +141,7 @@ const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
           <div style={{ fontSize:'.85rem', color:'var(--crimson)', fontWeight:700, marginBottom:'.2rem' }}>❌ Mauvaise réponse</div>
           <div style={{ fontSize:'.8rem', color:'var(--gray-400)' }}>Ta réponse : <b>{wrongFlash.given || '(vide)'}</b></div>
           <div style={{ fontSize:'.85rem', color:'var(--sage-light)', marginTop:'.2rem' }}>✓ Bonne réponse : <b>{wrongFlash.correct}</b></div>
+          {cells[wrongFlash.idx]?.ref && <BibleRef ref={cells[wrongFlash.idx].ref} />}
         </div>
       )}
 
@@ -197,8 +198,9 @@ const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
           {active.hint && (
             showHint
               ? <HintBubble hint={active.hint} />
-              : <button className="btn btn-ghost" onClick={() => setShowHint(true)} style={{ marginTop:'.5rem', fontSize:'.8rem' }}>💡 Indice</button>
+              : <button className="btn btn-ghost" onClick={() => { setShowHint(true); spendXP(HINT_COSTS.bingo); }} style={{ marginTop:'.5rem', fontSize:'.8rem' }}>💡 Indice <span style={{ color:'var(--crimson)', fontSize:'.7rem' }}>−{HINT_COSTS.bingo} XP</span></button>
           )}
+          {active.ref && <BibleRef ref={active.ref} />}
           <button className="btn btn-ghost" onClick={() => { setActiveIdx(null); setShowHint(false); }} style={{ marginTop:'.5rem', fontSize:'.8rem' }}>
             Annuler
           </button>

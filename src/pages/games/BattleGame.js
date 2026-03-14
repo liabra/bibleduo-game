@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import BottomNav from '../../components/BottomNav';
 import ScoreCard from '../../components/ScoreCard';
-import { useGame } from '../../context/GameContext';
+import { useGame, HINT_COSTS } from '../../context/GameContext';
 import { BATTLE_QS } from '../../data/gamesData';
 import { buildQuestionPool } from '../../data/bibleData';
 import {
@@ -37,7 +37,7 @@ const aiThinkTime = (diff) => {
 const aiIsCorrect = (diff) => Math.random() < AI_LEVELS[diff].accuracy;
 
 const BattleGame = ({ onBack, onXP }) => {
-  const { profile } = useGame();
+  const { profile, spendXP } = useGame();
 
   const [phase, setPhase] = useState('choose');
   const [difficulty, setDifficulty] = useState('medium');
@@ -49,6 +49,7 @@ const BattleGame = ({ onBack, onXP }) => {
   const [fb, setFb] = useState(null);
   const [aiThinking, setAiThinking] = useState(false);
   const [aiAnswer, setAiAnswer] = useState(null);
+  const [aiToast, setAiToast]   = useState(null); // message IA affiché brièvement
   const [paused, setPaused] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [history, setHistory] = useState([]);
@@ -94,8 +95,12 @@ const BattleGame = ({ onBack, onXP }) => {
       setShowHint(false);
 
       aiRef.current = setTimeout(() => {
-        setAiAnswer(aiIsCorrect(diffRef.current) ? 'correct' : 'wrong');
+        const correct = aiIsCorrect(diffRef.current);
+        setAiAnswer(correct ? 'correct' : 'wrong');
         setAiThinking(false);
+        // Toast IA visible 2.5s
+        setAiToast(correct ? '🤖 L\'IA a trouvé !' : '🤖 L\'IA s\'est trompée');
+        setTimeout(() => setAiToast(null), 2500);
       }, aiThinkTime(diffRef.current));
     },
     [qs]
@@ -469,11 +474,25 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
 
   /* ── PLAYING ── */
   const q = qs[idx];
+  const aiColor = aiAnswer === 'correct' ? 'var(--sage-light)' : 'var(--crimson)';
   const tc =
     timeLeft <= 3 ? '#e63946' : timeLeft <= 6 ? '#ff9f1c' : 'var(--gold-light)';
 
   return (
     <div className="page-content">
+      {/* Toast IA */}
+      {aiToast && (
+        <div style={{
+          position: 'fixed', top: '8%', left: '50%', transform: 'translateX(-50%)',
+          background: 'var(--ink-mid)', border: `2px solid ${aiColor}`,
+          borderRadius: 10, padding: '.5rem 1.2rem', zIndex: 999,
+          color: aiColor, fontFamily: 'var(--font-display)', fontSize: '.9rem',
+          animation: 'popIn .3s cubic-bezier(.34,1.56,.64,1) both',
+          pointerEvents: 'none', whiteSpace: 'nowrap',
+        }}>
+          {aiToast}
+        </div>
+      )}
       {paused && <PauseOverlay onResume={() => setPaused(false)} onQuit={onBack} />}
 
       <div
@@ -540,29 +559,19 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
 
         <div
           style={{
-            background: 'rgba(139,26,26,.15)',
-            borderRadius: 10,
-            padding: '.5rem',
-            textAlign: 'center'
+            background: aiAnswer === 'correct' ? 'rgba(45,106,79,.2)' : aiAnswer === 'wrong' ? 'rgba(139,26,26,.2)' : 'rgba(139,26,26,.15)',
+            borderRadius: 10, padding: '.5rem', textAlign: 'center',
+            transition: 'background .4s',
           }}
         >
           <div className="text-tiny">IA 🤖</div>
-          <div
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.6rem',
-              color: '#f87171'
-            }}
-          >
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: '#f87171' }}>
             {scores[1]}
           </div>
-          <div
-            style={{
-              fontSize: '.6rem',
-              color: aiThinking ? '#ff9f1c' : 'transparent'
-            }}
-          >
-            {aiThinking ? '🤔…' : '·'}
+          <div style={{ fontSize: '.6rem', minHeight: '1em',
+            color: aiThinking ? '#ff9f1c' : aiAnswer === 'correct' ? 'var(--sage-light)' : aiAnswer === 'wrong' ? 'var(--crimson)' : 'transparent',
+          }}>
+            {aiThinking ? '🤔 réfléchit…' : aiAnswer === 'correct' ? '✓ bonne réponse' : aiAnswer === 'wrong' ? '✗ erreur' : '·'}
           </div>
         </div>
       </div>
@@ -631,9 +640,9 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
         <button
           className="btn btn-ghost"
           style={{ fontSize: '.8rem', marginBottom: '.5rem' }}
-          onClick={() => setShowHint(true)}
+          onClick={() => { setShowHint(true); spendXP(HINT_COSTS.battle[difficulty]); }}
         >
-          💡 Indice
+          💡 Indice <span style={{ color: 'var(--crimson)', fontSize: '.7rem' }}>−{HINT_COSTS.battle[difficulty]} XP</span>
         </button>
       )}
 

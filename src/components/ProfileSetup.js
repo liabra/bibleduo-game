@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 
-const ProfileSetup = ({ onDone }) => {
-  const { saveProfile, AVATARS } = useGame();
-  const [name, setName]       = useState('');
-  const [avatar, setAvatar]   = useState('📖');
+// Props :
+//   onDone  : callback après sauvegarde
+//   isEdit  : true = mode modification (profil existant) — affichage rassurant
+const ProfileSetup = ({ onDone, isEdit = false }) => {
+  const { saveProfile, profile, AVATARS } = useGame();
+  const [name,   setName]   = useState(isEdit ? profile.name   : '');
+  const [avatar, setAvatar] = useState(isEdit ? profile.avatar : '📖');
 
   const save = () => {
-    saveProfile(name, avatar);
+    saveProfile(name || profile.name, avatar);
     onDone?.();
   };
 
@@ -19,41 +22,48 @@ const ProfileSetup = ({ onDone }) => {
       <div style={{ width: '100%', maxWidth: 400 }}>
         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <div style={{ fontSize: '4rem', marginBottom: '.5rem' }}>{avatar}</div>
-          <h2>Créer ton profil</h2>
-          <p className="text-small mt-1">Pour sauvegarder ta progression</p>
+          {isEdit ? (
+            <>
+              <h2>Modifier ton profil</h2>
+              <p className="text-small mt-1" style={{ color: 'var(--sage-light)' }}>
+                ✅ Ta progression est conservée
+              </p>
+            </>
+          ) : (
+            <>
+              <h2>Créer ton profil</h2>
+              <p className="text-small mt-1">Pour sauvegarder ta progression</p>
+            </>
+          )}
         </div>
 
-        {/* Name input */}
+        {/* Nom */}
         <div style={{ marginBottom: '1.25rem' }}>
           <label className="text-small" style={{ display: 'block', marginBottom: '.4rem' }}>
-            Ton prénom ou pseudo
+            {isEdit ? 'Nouveau pseudo' : 'Ton prénom ou pseudo'}
           </label>
           <input
             className="game-input"
             value={name}
             onChange={e => setName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && save()}
-            placeholder="Ex: Samuel, Marie, Disciple42…"
+            placeholder={isEdit ? profile.name : 'Ex: Samuel, Marie, Disciple42…'}
             maxLength={24}
             autoFocus
           />
         </div>
 
-        {/* Avatar selector */}
+        {/* Avatar */}
         <div style={{ marginBottom: '1.5rem' }}>
           <div className="text-small" style={{ marginBottom: '.5rem' }}>Choisis ton avatar</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '.4rem' }}>
             {AVATARS.map(av => (
-              <button
-                key={av}
-                onClick={() => setAvatar(av)}
-                style={{
-                  fontSize: '1.5rem', padding: '.5rem', borderRadius: 8, border: 'none', cursor: 'pointer',
-                  background: avatar === av ? 'rgba(201,168,76,.25)' : 'rgba(255,255,255,.05)',
-                  outline: avatar === av ? '2px solid var(--gold)' : 'none',
-                  transition: 'all .15s',
-                }}
-              >{av}</button>
+              <button key={av} onClick={() => setAvatar(av)} style={{
+                fontSize: '1.5rem', padding: '.5rem', borderRadius: 8, border: 'none', cursor: 'pointer',
+                background: avatar === av ? 'rgba(201,168,76,.25)' : 'rgba(255,255,255,.05)',
+                outline: avatar === av ? '2px solid var(--gold)' : 'none',
+                transition: 'all .15s',
+              }}>{av}</button>
             ))}
           </div>
         </div>
@@ -62,14 +72,20 @@ const ProfileSetup = ({ onDone }) => {
           className="btn btn-primary w-full"
           style={{ padding: '1rem', fontSize: '1.1rem' }}
           onClick={save}
-          disabled={!name.trim()}
+          disabled={!isEdit && !name.trim()}
         >
-          C'est parti ! 🚀
+          {isEdit ? '💾 Enregistrer les modifications' : 'C\'est parti ! 🚀'}
         </button>
 
-        <button className="btn btn-ghost w-full" style={{ marginTop: '.5rem', fontSize: '.85rem' }} onClick={onDone}>
-          Continuer sans profil
-        </button>
+        {isEdit ? (
+          <button className="btn btn-ghost w-full" style={{ marginTop: '.5rem', fontSize: '.85rem' }} onClick={onDone}>
+            Annuler
+          </button>
+        ) : (
+          <button className="btn btn-ghost w-full" style={{ marginTop: '.5rem', fontSize: '.85rem' }} onClick={onDone}>
+            Continuer sans profil
+          </button>
+        )}
       </div>
     </div>
   );

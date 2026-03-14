@@ -5,8 +5,17 @@ import ProfileQR from './ProfileQR';
 const KOFI_URL    = 'https://ko-fi.com/liabalagnaranin';
 const FEEDBACK_URL = 'https://forms.gle/PLQSfC26NsA3Gn6d9';
 
+const GAME_META = {
+  speedrun:  { label: 'Speed Verse',    icon: '⚡' },
+  battle:    { label: 'Bible Battle',   icon: '⚔️' },
+  memory:    { label: 'Bible Memory',   icon: '🃏' },
+  bingo:     { label: 'Bible Bingo',    icon: '🎯' },
+  escape:    { label: 'Bible Escape',   icon: '🔐' },
+  secretkey: { label: 'Clé Secrète',   icon: '🗝️' },
+};
+
 const ProfileView = ({ onClose, onEdit }) => {
-  const { profile, stats, level, xpProgress } = useGame();
+  const { profile, stats, level, xpProgress, xpCurrent, xpNeeded, escapeBadges } = useGame();
   const [showQR,    setShowQR]    = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -66,7 +75,7 @@ const ProfileView = ({ onClose, onEdit }) => {
         <div style={{ marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '.35rem' }}>
             <span className="text-tiny">Progression vers Niv.{level + 1}</span>
-            <span className="text-tiny text-gold">{xpProgress}/100 XP</span>
+            <span className="text-tiny text-gold">{xpCurrent}/{xpNeeded} XP</span>
           </div>
           <div className="xp-bar-track">
             <div className="xp-bar-fill" style={{ width: `${xpProgress}%` }} />
@@ -90,6 +99,45 @@ const ProfileView = ({ onClose, onEdit }) => {
             </div>
           ))}
         </div>
+
+        {/* Historique des jeux */}
+        {gamesCount > 0 && (
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-display)', color: 'var(--gold)', fontSize: '.75rem', letterSpacing: '.08em', marginBottom: '.5rem' }}>🎮 HISTORIQUE</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '.35rem' }}>
+              {Object.entries(stats.gamesPlayed || {}).filter(([, n]) => n > 0).map(([gameId, count]) => {
+                const meta = GAME_META[gameId];
+                if (!meta) return null;
+                return (
+                  <div key={gameId} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(201,168,76,.06)', borderRadius: 8, padding: '.45rem .75rem' }}>
+                    <span style={{ fontSize: '.88rem' }}>{meta.icon} {meta.label}</span>
+                    <span style={{ fontFamily: 'var(--font-display)', color: 'var(--gold-light)', fontSize: '.8rem', fontWeight: 700 }}>{count}×</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Badges Bible Escape */}
+        {escapeBadges.length > 0 && (
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-display)', color: 'var(--gold)', fontSize: '.75rem', letterSpacing: '.08em', marginBottom: '.5rem' }}>🏅 BADGES OBTENUS</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem' }}>
+              {escapeBadges.map((badge) => (
+                <div key={badge.id} title={badge.reward} style={{
+                  background: 'rgba(201,168,76,.12)', border: '1px solid rgba(201,168,76,.35)',
+                  borderRadius: 10, padding: '.4rem .6rem', textAlign: 'center',
+                  minWidth: 72, flex: '1 1 auto', maxWidth: 120,
+                }}>
+                  <div style={{ fontSize: '1.5rem', lineHeight: 1 }}>{badge.icon}</div>
+                  <div style={{ fontSize: '.62rem', color: 'var(--gold-light)', fontFamily: 'var(--font-display)', marginTop: '.2rem', lineHeight: 1.3 }}>{badge.title}</div>
+                  <div style={{ fontSize: '.58rem', color: 'var(--gray-400)', marginTop: '.1rem' }}>{badge.reward}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Actions — Partage */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '.6rem', marginBottom: '1rem' }}>

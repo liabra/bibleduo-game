@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { ESCAPE_LEVELS } from '../../data/gamesData';
 import { useGame } from '../../context/GameContext';
+import { BibleRef } from './shared';
+import { HINT_COSTS } from '../../context/GameContext';
 
 const EscapeGame = ({ onBack, onXP }) => {
-  const { stats, spendXP } = useGame();
+  const { stats, spendXP, addEscapeBadge } = useGame();
   const [levelIdx, setLevelIdx]     = useState(0);
   const [enigmaIdx, setEnigmaIdx]   = useState(0);
   const [input, setInput]           = useState('');
@@ -42,7 +44,12 @@ const EscapeGame = ({ onBack, onXP }) => {
   const checkCode = () => {
     if (codeInput.trim().toUpperCase() === level.code) {
       setCleared(c => [...c, levelIdx]);
-      if (!xpFiredRef.current) { xpFiredRef.current = true; onXP(level.xp); }
+      if (!xpFiredRef.current) {
+        xpFiredRef.current = true;
+        onXP(level.xp);
+        // Persiste le badge dans le contexte global
+        addEscapeBadge({ id: level.id, reward: level.reward, title: level.title, icon: level.icon });
+      }
       setPhase('solved');
     } else {
       setCodeError(true);
@@ -200,7 +207,12 @@ const EscapeGame = ({ onBack, onXP }) => {
       <div className="card-white" style={{ marginBottom: '1rem', border: result === 'ok' ? '2px solid var(--sage)' : result === 'err' ? '2px solid var(--crimson)' : undefined, transition: 'border .3s' }}>
         <div className="text-tiny" style={{ color: 'var(--gold-dark)', marginBottom: '.4rem' }}>ÉNIGME {enigmaIdx+1}</div>
         <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', color: 'var(--ink)', lineHeight: 1.5 }}>{enigma.q}</p>
-        {hint && <p style={{ fontStyle: 'italic', color: 'var(--gold-dark)', fontSize: '.85rem', marginTop: '.5rem' }}>💡 {enigma.hint}</p>}
+        {hint && (
+          <div style={{ marginTop: '.5rem' }}>
+            <p style={{ fontStyle: 'italic', color: 'var(--gold-dark)', fontSize: '.85rem' }}>💡 {enigma.hint}</p>
+          </div>
+        )}
+        {result === 'ok' && enigma.ref && <BibleRef ref={enigma.ref} />}
         {result && <div style={{ textAlign: 'center', fontSize: '1.8rem', marginTop: '.5rem' }}>{result === 'ok' ? '✅' : '❌'}</div>}
       </div>
 
@@ -209,7 +221,12 @@ const EscapeGame = ({ onBack, onXP }) => {
         <button className="btn btn-primary" onClick={checkAnswer}>→</button>
       </div>
       {!hint && (
-        <button className="btn btn-ghost" onClick={() => setHint(true)} style={{ fontSize: '.8rem' }}>💡 Voir l'indice</button>
+        <button className="btn btn-ghost" onClick={() => {
+          setHint(true);
+          spendXP(HINT_COSTS.escape);
+        }} style={{ fontSize: '.8rem' }}>
+          💡 Voir l'indice <span style={{ color: 'var(--crimson)', fontSize: '.7rem' }}>−{HINT_COSTS.escape} XP</span>
+        </button>
       )}
       <BottomNav />
     </div>
