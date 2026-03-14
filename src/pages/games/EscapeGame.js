@@ -30,6 +30,7 @@ const EscapeGame = ({ onBack, onXP }) => {
   };
 
   const checkAnswer = () => {
+    if (!enigma || result !== null) return;
     const ok = input.trim().toLowerCase().includes(enigma.a.toLowerCase());
     setResult(ok ? 'ok' : 'err');
     if (ok) {
@@ -246,7 +247,7 @@ const EscapeGame = ({ onBack, onXP }) => {
             <p style={{ fontStyle: 'italic', color: 'var(--gold-dark)', fontSize: '.85rem' }}>💡 {enigma.hint}</p>
           </div>
         )}
-        {result === 'ok' && enigma.ref && <BibleRef ref={enigma.ref} />}
+        {result === 'ok' && enigma.ref && <BibleRef verse={enigma.ref} />}
         {result && <div style={{ textAlign: 'center', fontSize: '1.8rem', marginTop: '.5rem' }}>{result === 'ok' ? '✅' : '❌'}</div>}
       </div>
 

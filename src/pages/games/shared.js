@@ -127,15 +127,15 @@ export const PauseOverlay = ({ onResume, onQuit }) => (
 
 /**
  * Référence biblique — affichage discret après révélation de réponse.
- * Usage : {q.ref && <BibleRef ref={q.ref} />}
+ * Usage : {q.ref && <BibleRef verse={q.ref} />}
  */
-export const BibleRef = ({ ref: refText }) => refText ? (
+export const BibleRef = ({ verse }) => verse ? (
   <div style={{
     fontSize: '.65rem', color: 'var(--gold-dark)',
     fontFamily: 'var(--font-display)', opacity: .75,
     marginTop: '.3rem', letterSpacing: '.04em',
   }}>
-    📖 {refText}
+    📖 {verse}
   </div>
 ) : null;
 

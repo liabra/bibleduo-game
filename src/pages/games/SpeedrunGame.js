@@ -250,7 +250,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
                   <span style={{ color:'#e63946' }}>✗ {w.given || '(vide)'}</span>
                   <span style={{ color:'var(--sage-light)' }}>✓ {w.a}</span>
                 </div>
-                {w.ref && <BibleRef ref={w.ref} />}
+                {w.ref && <BibleRef verse={w.ref} />}
               </div>
             ))}
           </div>
@@ -307,7 +307,7 @@ const SpeedrunGame = ({ onBack, onXP }) => {
           <p style={{ fontSize:'.85rem', color:'var(--ink-light)', marginBottom:'.25rem' }}>{showCorrection.q}</p>
           <p style={{ color:'var(--crimson)', fontSize:'.85rem' }}>Répondu : <b>{showCorrection.given || '(vide)'}</b></p>
           <p style={{ color:'var(--sage)', fontSize:'.9rem', fontWeight:700 }}>✓ {showCorrection.correct}</p>
-          {showCorrection.ref && <BibleRef ref={showCorrection.ref} />}
+          {showCorrection.ref && <BibleRef verse={showCorrection.ref} />}
         </div>
       ) : (
         <>

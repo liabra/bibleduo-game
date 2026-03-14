@@ -36,15 +36,18 @@ const TYPE_MAP = {
 /**
  * Convertit une question MongoDB en format utilisable par les jeux React.
  * @param {object} q - Question issue de l'API
- * @returns {{ q: string, a: string, opts?: string[], type: string, hint: string }}
+ * @returns {{ q: string, a: string, opts?: string[], type: string, hint: string, ref?: string }}
  */
 function adaptQuestion(q) {
+  // Résolution de la référence biblique : priorité à referenceDetails.ref, puis reference, sinon absent
+  const ref = q.referenceDetails?.ref || q.reference || undefined;
   return {
     q:    q.question,
     a:    String(q.correctAnswer ?? ''),
     opts: Array.isArray(q.options) && q.options.length > 0 ? q.options : undefined,
     type: TYPE_MAP[q.type] ?? 'text',
     hint: q.hint ?? '',
+    ...(ref ? { ref } : {}),
   };
 }
 

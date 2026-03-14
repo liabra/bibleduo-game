@@ -142,7 +142,7 @@ const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
           <div style={{ fontSize:'.85rem', color:'var(--crimson)', fontWeight:700, marginBottom:'.2rem' }}>❌ Mauvaise réponse</div>
           <div style={{ fontSize:'.8rem', color:'var(--gray-400)' }}>Ta réponse : <b>{wrongFlash.given || '(vide)'}</b></div>
           <div style={{ fontSize:'.85rem', color:'var(--sage-light)', marginTop:'.2rem' }}>✓ Bonne réponse : <b>{wrongFlash.correct}</b></div>
-          {cells[wrongFlash.idx]?.ref && <BibleRef ref={cells[wrongFlash.idx].ref} />}
+          {cells[wrongFlash.idx]?.ref && <BibleRef verse={cells[wrongFlash.idx].ref} />}
         </div>
       )}
 
@@ -201,7 +201,7 @@ const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
               ? <HintBubble hint={active.hint} />
               : <button className="btn btn-ghost" onClick={() => { setShowHint(true); spendXP(HINT_COSTS.bingo); }} style={{ marginTop:'.5rem', fontSize:'.8rem' }}>💡 Indice <span style={{ color:'var(--crimson)', fontSize:'.7rem' }}>−{HINT_COSTS.bingo} XP</span></button>
           )}
-          {active.ref && <BibleRef ref={active.ref} />}
+          {active.ref && <BibleRef verse={active.ref} />}
           <button className="btn btn-ghost" onClick={() => { setActiveIdx(null); setShowHint(false); }} style={{ marginTop:'.5rem', fontSize:'.8rem' }}>
             Annuler
           </button>

@@ -614,12 +614,12 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
             <div style={{ color: 'var(--sage)', fontWeight: 700, marginTop: '.2rem' }}>
               ✓ {fb.correct}
             </div>
-            <BibleRef ref={q?.ref} />
+            <BibleRef verse={q?.ref} />
           </div>
         ) : fb?.ok ? (
           <div>
             <div style={{ fontSize: '2rem' }}>✅</div>
-            <BibleRef ref={q?.ref} />
+            <BibleRef verse={q?.ref} />
           </div>
         ) : fb && correctionMode === 'recap' && !fb.ok ? (
           <div style={{ fontSize: '1.6rem' }}>❌</div>
