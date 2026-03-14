@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const NAV_ITEMS = [
   { path: '/games',   icon: '🎮', label: 'Jeux' },
   { path: '/updates', icon: '📰', label: 'Nouveautés' },
+  { path: '/about',   icon: '✦',  label: 'À propos' },
 ];
 
 const BottomNav = () => {

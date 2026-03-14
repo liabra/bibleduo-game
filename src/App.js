@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { GameProvider } from './context/GameContext';
 import GamesPage from './pages/GamesPage';
 import UpdatesPage from './components/UpdatesPage';
+import AboutPage from './components/AboutPage';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route path="/"        element={<GamesPage />} />
           <Route path="/games"   element={<GamesPage />} />
           <Route path="/updates" element={<UpdatesPage />} />
+          <Route path="/about"   element={<AboutPage />} />
           {/* Catch-all — prevents white screen on unknown routes */}
           <Route path="*"        element={<GamesPage />} />
         </Routes>
