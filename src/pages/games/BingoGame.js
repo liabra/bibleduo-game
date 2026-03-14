@@ -5,11 +5,15 @@ import ScoreCard from '../../components/ScoreCard';
 import { useGame } from '../../context/GameContext';
 import { shuffle, HintBubble, PauseOverlay, ShareBtn, ScoreImageBtn } from './shared';
 
-// ── Fix : makeGrid appelé à chaque "Rejouer" via key, pas une seule fois ──────
+// ── makeGrid : 24 défis + case libre, plus une réserve pour rotation ─────────
+// Quand une mauvaise réponse est donnée, la case reçoit un défi de la réserve.
 const makeGrid = () => {
-  const pool = shuffle(BINGO_CHALLENGES.filter(c => c.type !== 'free')).slice(0, 24);
-  const free = BINGO_CHALLENGES.find(c => c.type === 'free');
-  return [...pool.slice(0, 12), free, ...pool.slice(12, 24)];
+  const nonFree = shuffle(BINGO_CHALLENGES.filter(c => c.type !== 'free'));
+  const playing = nonFree.slice(0, 24);
+  const reserve = nonFree.slice(24); // défis non utilisés → réserve de rotation
+  const free    = BINGO_CHALLENGES.find(c => c.type === 'free');
+  const cells   = [...playing.slice(0, 12), free, ...playing.slice(12, 24)];
+  return { cells, reserve: shuffle(reserve) };
 };
 
 const checkBingo = (completed) => {
@@ -24,7 +28,8 @@ const checkBingo = (completed) => {
 // Composant interne réinitialisé via key à chaque "Rejouer"
 const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
   const { profile } = useGame();
-  const [cells]                     = useState(makeGrid);   // ← appelé à chaque montage
+  const [grid, setGrid]             = useState(makeGrid);   // { cells, reserve }
+  const cells = grid.cells;
   const [completed, setCompleted]   = useState(new Set([12]));
   const [activeIdx, setActiveIdx]   = useState(null);
   const [input, setInput]           = useState('');
@@ -60,21 +65,38 @@ const BingoBoard = ({ onBack, onXP, onReplay, correctionMode }) => {
     setShowHint(false);
   };
 
+  const rotateCell = (idx) => {
+    // Remplace la question de la case par la prochaine de la réserve
+    setGrid(g => {
+      if (g.reserve.length === 0) return g;
+      const [alt, ...rest] = g.reserve;
+      const newCells = g.cells.map((c, i) => i === idx ? alt : c);
+      return { cells: newCells, reserve: rest };
+    });
+  };
+
   const validateAnswer = (ans) => {
     if (activeIdx === null) return;
     const correct = cells[activeIdx].a.toLowerCase();
     if (ans.trim().toLowerCase() === correct) {
       completeCell(activeIdx);
     } else {
-      // Mauvaise réponse
+      // Mauvaise réponse → rotation vers une nouvelle question + feedback
+      const savedIdx = activeIdx;
       if (correctionMode === 'immediate') {
-        setWrongFlash({ idx: activeIdx, correct: cells[activeIdx].a, given: ans });
-        setTimeout(() => { setWrongFlash(null); setActiveIdx(null); setInput(''); setShowHint(false); }, 2000);
+        setWrongFlash({ idx: savedIdx, correct: cells[savedIdx].a, given: ans });
+        setTimeout(() => {
+          setWrongFlash(null);
+          setActiveIdx(null);
+          setInput('');
+          setShowHint(false);
+          rotateCell(savedIdx); // Nouvelle question pour cette case
+        }, 2000);
       } else {
-        // Mode résumé : on ferme juste la question, erreur visible en fin
         setActiveIdx(null);
         setInput('');
         setShowHint(false);
+        rotateCell(savedIdx); // Silencieuse en mode résumé
       }
     }
   };

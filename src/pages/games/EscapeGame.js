@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { ESCAPE_LEVELS } from '../../data/gamesData';
+import { useGame } from '../../context/GameContext';
 
 const EscapeGame = ({ onBack, onXP }) => {
+  const { stats, spendXP } = useGame();
   const [levelIdx, setLevelIdx]     = useState(0);
   const [enigmaIdx, setEnigmaIdx]   = useState(0);
   const [input, setInput]           = useState('');
@@ -52,14 +54,21 @@ const EscapeGame = ({ onBack, onXP }) => {
   if (phase === 'intro') return (
     <div className="page-content">
       <button className="btn btn-ghost" onClick={onBack} style={{ marginBottom: '.75rem' }}>← Retour</button>
-      <h2 style={{ marginBottom: '1rem' }}>🔐 Bible Escape</h2>
+      <h2 style={{ marginBottom: '.25rem' }}>🔐 Bible Escape</h2>
+      <p className="text-tiny" style={{ marginBottom: '1rem' }}>⭐ {stats.xp} XP disponibles</p>
       {ESCAPE_LEVELS.map((l, i) => {
         const unlocked = i <= cleared.length;
+        const done     = cleared.includes(i);
+        const canSkip  = !unlocked && !done && stats.xp >= l.skipCost;
+        const skipable = !unlocked && !done;
         return (
-          <div key={l.id} onClick={() => unlocked && goLevel(i)} className="card" style={{ marginBottom: '.6rem', cursor: unlocked ? 'pointer' : 'default', opacity: unlocked ? 1 : .4, transition: 'all .2s' }}
-            onMouseEnter={e => unlocked && (e.currentTarget.style.borderColor = 'rgba(201,168,76,.4)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(201,168,76,.18)')}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
+          <div key={l.id} className="card" style={{ marginBottom: '.6rem', transition: 'all .2s', opacity: unlocked || skipable ? 1 : .35 }}>
+            <div
+              onClick={() => unlocked && goLevel(i)}
+              style={{ display: 'flex', alignItems: 'center', gap: '.75rem', cursor: unlocked ? 'pointer' : 'default' }}
+              onMouseEnter={e => unlocked && (e.currentTarget.parentElement.style.borderColor = 'rgba(201,168,76,.4)')}
+              onMouseLeave={e => (e.currentTarget.parentElement.style.borderColor = 'rgba(201,168,76,.18)')}
+            >
               <span style={{ fontSize: '2rem' }}>{l.icon}</span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--gold-light)', marginBottom: '.15rem' }}>
@@ -67,8 +76,31 @@ const EscapeGame = ({ onBack, onXP }) => {
                 </div>
                 <div className="text-tiny">{l.enigmas.length} énigmes · {l.reward} · {l.xp} XP</div>
               </div>
-              <span style={{ fontSize: '1.2rem' }}>{cleared.includes(i) ? '✅' : unlocked ? '▶️' : '🔒'}</span>
+              <span style={{ fontSize: '1.2rem' }}>{done ? '✅' : unlocked ? '▶️' : '🔒'}</span>
             </div>
+            {/* Bouton skip pour niveaux verrouillés */}
+            {skipable && (
+              <div style={{ marginTop: '.5rem', paddingTop: '.5rem', borderTop: '1px solid rgba(201,168,76,.12)' }}>
+                <button
+                  onClick={() => {
+                    if (!canSkip) return;
+                    spendXP(l.skipCost);
+                    setCleared(c => [...c, i]);
+                  }}
+                  disabled={!canSkip}
+                  style={{
+                    background: canSkip ? 'rgba(201,168,76,.12)' : 'rgba(255,255,255,.04)',
+                    border: `1px solid ${canSkip ? 'rgba(201,168,76,.35)' : 'rgba(255,255,255,.1)'}`,
+                    borderRadius: 7, padding: '.3rem .7rem',
+                    color: canSkip ? 'var(--gold)' : 'var(--gray-400)',
+                    fontSize: '.72rem', cursor: canSkip ? 'pointer' : 'not-allowed',
+                    fontFamily: 'var(--font-body)',
+                  }}
+                >
+                  {canSkip ? `⏭ Passer ce niveau (−${l.skipCost} XP)` : `🔒 Il faut ${l.skipCost} XP pour passer`}
+                </button>
+              </div>
+            )}
           </div>
         );
       })}

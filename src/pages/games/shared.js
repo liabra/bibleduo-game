@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 /**
  * Mélange Fisher-Yates — distribution uniforme garantie.
@@ -29,6 +29,32 @@ export const shuffleOpts = (q) => ({
  * Retourne un élément aléatoire d'un tableau.
  */
 export const rand = (arr = []) => arr[Math.floor(Math.random() * arr.length)];
+
+/**
+ * Hook anti-répétition pour les banques de questions.
+ * Garantit que toutes les questions sont vues avant de recirculer.
+ * Usage : const { pick } = useQuestionPool(SPEEDRUN_QS);
+ *         const q = pick();    // 1 question
+ *         const qs = pick(10); // 10 questions
+ */
+export const useQuestionPool = (questions) => {
+  const unusedRef = useRef([]);
+
+  const pick = useCallback((n = 1) => {
+    // Recharge quand le panier est vide (cycle complet)
+    if (unusedRef.current.length < n) {
+      // Mélange TOUTES les questions et repart à zéro
+      const full = shuffle([...questions]);
+      unusedRef.current = [...unusedRef.current, ...full];
+    }
+    const taken = unusedRef.current.splice(0, n);
+    return n === 1 ? taken[0] : taken;
+  }, [questions]);
+
+  const reset = useCallback(() => { unusedRef.current = []; }, []);
+
+  return { pick, reset };
+};
 
 /**
  * Petit toast XP
@@ -98,6 +124,20 @@ export const PauseOverlay = ({ onResume, onQuit }) => (
     </div>
   </div>
 );
+
+/**
+ * Référence biblique — affichage discret après révélation de réponse.
+ * Usage : {q.ref && <BibleRef ref={q.ref} />}
+ */
+export const BibleRef = ({ ref: refText }) => refText ? (
+  <div style={{
+    fontSize: '.65rem', color: 'var(--gold-dark)',
+    fontFamily: 'var(--font-display)', opacity: .75,
+    marginTop: '.3rem', letterSpacing: '.04em',
+  }}>
+    📖 {refText}
+  </div>
+) : null;
 
 /**
  * Affichage d'indice

@@ -135,12 +135,26 @@ const GamesPage = () => {
       </div>
 
       {/* Événement saisonnier */}
-      <div style={{ background: 'linear-gradient(135deg, rgba(139,26,26,.22), rgba(201,168,76,.08))', border: '1px solid rgba(201,168,76,.2)', borderRadius: 14, padding: '1rem', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(135deg, rgba(139,26,26,.22), rgba(201,168,76,.08))', border: '1px solid rgba(201,168,76,.2)', borderRadius: 14, padding: '1rem', position: 'relative', overflow: 'hidden', marginBottom: '.65rem' }}>
         <div style={{ position: 'absolute', top: -4, right: 8, fontSize: '3.5rem', opacity: .07, lineHeight: 1 }}>⚔️</div>
         <div className="text-tiny" style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)', letterSpacing: '.1em', marginBottom: '.3rem' }}>🎺 ÉVÉNEMENT SAISONNIER</div>
         <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--parch)', marginBottom: '.25rem' }}>Défi Goliath — Boss Fight</div>
         <div className="text-small" style={{ marginBottom: '.75rem' }}>60s · 20 réponses parfaites · Vaincs Goliath !</div>
         <button className="btn btn-primary" style={{ fontSize: '.85rem', padding: '.5rem 1.2rem' }} onClick={() => setActiveGame('speedrun')}>Relever le défi →</button>
+      </div>
+
+      {/* Soutien + Feedback */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.5rem', marginBottom: '.5rem' }}>
+        <a href="https://ko-fi.com/liabalagnaranin" target="_blank" rel="noopener noreferrer"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '.4rem', background: 'rgba(255,94,91,.1)', border: '1px solid rgba(255,94,91,.25)', borderRadius: 10, padding: '.55rem .5rem', color: '#ff8a87', textDecoration: 'none', fontSize: '.72rem', fontFamily: 'var(--font-display)', fontWeight: 700, textAlign: 'center' }}
+        >
+          ☕ Soutenir
+        </a>
+        <a href="https://forms.gle/PLQSfC26NsA3Gn6d9" target="_blank" rel="noopener noreferrer"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '.4rem', background: 'rgba(30,58,95,.2)', border: '1px solid rgba(30,58,95,.4)', borderRadius: 10, padding: '.55rem .5rem', color: 'rgba(253,246,227,.6)', textDecoration: 'none', fontSize: '.72rem', fontFamily: 'var(--font-display)', fontWeight: 700, textAlign: 'center' }}
+        >
+          💬 Donner un avis
+        </a>
       </div>
 
       <BottomNav />

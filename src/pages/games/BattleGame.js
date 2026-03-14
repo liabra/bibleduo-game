@@ -10,7 +10,8 @@ import {
   PauseOverlay,
   HintBubble,
   ShareBtn,
-  ScoreImageBtn
+  ScoreImageBtn,
+  BibleRef,
 } from './shared';
 
 const buildPool = () => {
@@ -22,13 +23,24 @@ const buildPool = () => {
   return shuffle([...base, ...dynamic]);
 };
 
-const aiThinkTime = () => 2000 + Math.random() * 5000;
-const aiIsCorrect = () => Math.random() < 0.65;
+// ── Fausse IA paramétrée par difficulté ────────────────────────────────────
+const AI_LEVELS = {
+  easy:   { label: '😇 Novice',  desc: 'Répond lentement, se trompe souvent',   color: '#40916c', accuracy: 0.28, thinkMin: 4000, thinkMax: 7000, xpBonus: 40  },
+  medium: { label: '🤖 Standard',desc: 'Vitesse normale, taux de réussite moyen',color: '#ff9f1c', accuracy: 0.62, thinkMin: 1500, thinkMax: 3000, xpBonus: 70  },
+  hard:   { label: '💀 Expert',  desc: 'Répond vite, se trompe rarement',        color: '#e63946', accuracy: 0.90, thinkMin: 200,  thinkMax: 900,  xpBonus: 100 },
+};
+
+const aiThinkTime = (diff) => {
+  const { thinkMin, thinkMax } = AI_LEVELS[diff];
+  return thinkMin + Math.random() * (thinkMax - thinkMin);
+};
+const aiIsCorrect = (diff) => Math.random() < AI_LEVELS[diff].accuracy;
 
 const BattleGame = ({ onBack, onXP }) => {
   const { profile } = useGame();
 
   const [phase, setPhase] = useState('choose');
+  const [difficulty, setDifficulty] = useState('medium');
   const [qs, setQs] = useState([]);
   const [idx, setIdx] = useState(0);
   const [scores, setScores] = useState([0, 0]);
@@ -47,6 +59,8 @@ const BattleGame = ({ onBack, onXP }) => {
   const timerRef = useRef(null);
   const aiRef = useRef(null);
   const xpRef = useRef(false);
+  const diffRef = useRef(difficulty);
+  useEffect(() => { diffRef.current = difficulty; }, [difficulty]);
 
   const start = () => {
     xpRef.current = false;
@@ -80,9 +94,9 @@ const BattleGame = ({ onBack, onXP }) => {
       setShowHint(false);
 
       aiRef.current = setTimeout(() => {
-        setAiAnswer(aiIsCorrect() ? 'correct' : 'wrong');
+        setAiAnswer(aiIsCorrect(diffRef.current) ? 'correct' : 'wrong');
         setAiThinking(false);
-      }, aiThinkTime());
+      }, aiThinkTime(diffRef.current));
     },
     [qs]
   );
@@ -197,108 +211,76 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
 
   /* ── CHOOSE ── */
   if (phase === 'choose') {
+    const ai = AI_LEVELS[difficulty];
     return (
       <div className="page-content">
-        <button className="btn btn-ghost" onClick={onBack}>
-          ← Retour
-        </button>
+        <button className="btn btn-ghost" onClick={onBack}>← Retour</button>
 
         <div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
           <div style={{ fontSize: '4rem' }}>⚔️</div>
           <h2 style={{ margin: '.5rem 0 .3rem' }}>Bible Battle</h2>
-          <p className="text-small">Toi vs IA · Questions variées · L'IA pense vraiment</p>
+          <p className="text-small">Toi vs IA · Questions variées · Choisis ta difficulté</p>
         </div>
 
-        <div className="card" style={{ marginBottom: '1.25rem' }}>
-          <p
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--gold-light)',
-              fontSize: '.9rem',
-              marginBottom: '.75rem'
-            }}
-          >
-            📋 Mode de correction
+        {/* Difficulté */}
+        <div className="card" style={{ marginBottom: '1rem' }}>
+          <p style={{ fontFamily: 'var(--font-display)', color: 'var(--gold-light)', fontSize: '.9rem', marginBottom: '.75rem' }}>
+            ⚔️ Difficulté de l'IA
           </p>
-
-          {[
-            {
-              key: 'immediate',
-              icon: '⚡',
-              title: 'Correction immédiate',
-              desc: "La bonne réponse s'affiche 1.4s après chaque erreur"
-            },
-            {
-              key: 'recap',
-              icon: '📝',
-              title: 'Résumé en fin',
-              desc: 'Toutes les erreurs visibles uniquement en fin de partie'
-            }
-          ].map(({ key, icon, title, desc }) => (
-            <div
-              key={key}
-              onClick={() => setCorrectionMode(key)}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '.75rem',
-                padding: '.75rem',
-                borderRadius: 10,
-                marginBottom: '.5rem',
-                cursor: 'pointer',
-                background:
-                  correctionMode === key
-                    ? 'rgba(201,168,76,.15)'
-                    : 'rgba(255,255,255,.03)',
-                border: `1.5px solid ${
-                  correctionMode === key
-                    ? 'rgba(201,168,76,.5)'
-                    : 'rgba(255,255,255,.06)'
-                }`,
-                transition: 'all .2s'
-              }}
-            >
-              <div style={{ fontSize: '1.4rem', flexShrink: 0 }}>{icon}</div>
-
-              <div>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    color: 'var(--parch)',
-                    fontSize: '.9rem',
-                    fontWeight: 700
-                  }}
-                >
-                  {title}
+          {Object.entries(AI_LEVELS).map(([key, d]) => (
+            <div key={key} onClick={() => setDifficulty(key)} style={{
+              display: 'flex', alignItems: 'center', gap: '.75rem',
+              padding: '.75rem', borderRadius: 10, marginBottom: '.4rem',
+              cursor: 'pointer',
+              background: difficulty === key ? `${d.color}22` : 'rgba(255,255,255,.03)',
+              border: `1.5px solid ${difficulty === key ? d.color + '88' : 'rgba(255,255,255,.06)'}`,
+              transition: 'all .2s',
+            }}>
+              <div style={{ fontSize: '1.4rem', flexShrink: 0 }}>{d.label.split(' ')[0]}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: 'var(--font-display)', color: difficulty === key ? d.color : 'var(--parch)', fontSize: '.88rem', fontWeight: 700 }}>
+                  {d.label}
                 </div>
-                <div className="text-tiny" style={{ marginTop: '.2rem', lineHeight: 1.4 }}>
-                  {desc}
-                </div>
+                <div className="text-tiny" style={{ marginTop: '.15rem' }}>{d.desc}</div>
               </div>
-
-              {correctionMode === key && (
-                <div
-                  style={{
-                    marginLeft: 'auto',
-                    color: 'var(--gold-light)',
-                    fontSize: '1.1rem'
-                  }}
-                >
-                  ✓
-                </div>
-              )}
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '.65rem', color: d.color, fontWeight: 700 }}>+{d.xpBonus} XP</div>
+                {difficulty === key && <div style={{ color: 'var(--gold-light)', fontSize: '1rem' }}>✓</div>}
+              </div>
             </div>
           ))}
         </div>
 
-        <button
-          className="btn btn-primary w-full"
-          style={{ padding: '1rem', fontSize: '1.1rem' }}
-          onClick={() => setPhase('ready')}
-        >
+        {/* Mode correction */}
+        <div className="card" style={{ marginBottom: '1.25rem' }}>
+          <p style={{ fontFamily: 'var(--font-display)', color: 'var(--gold-light)', fontSize: '.9rem', marginBottom: '.75rem' }}>
+            📋 Mode de correction
+          </p>
+          {[
+            { key: 'immediate', icon: '⚡', title: 'Correction immédiate', desc: "La bonne réponse s'affiche 1.4s après chaque erreur" },
+            { key: 'recap',     icon: '📝', title: 'Résumé en fin',        desc: 'Toutes les erreurs visibles uniquement en fin de partie' },
+          ].map(({ key, icon, title, desc }) => (
+            <div key={key} onClick={() => setCorrectionMode(key)} style={{
+              display: 'flex', alignItems: 'flex-start', gap: '.75rem',
+              padding: '.75rem', borderRadius: 10, marginBottom: '.4rem',
+              cursor: 'pointer',
+              background: correctionMode === key ? 'rgba(201,168,76,.15)' : 'rgba(255,255,255,.03)',
+              border: `1.5px solid ${correctionMode === key ? 'rgba(201,168,76,.5)' : 'rgba(255,255,255,.06)'}`,
+              transition: 'all .2s',
+            }}>
+              <div style={{ fontSize: '1.3rem', flexShrink: 0 }}>{icon}</div>
+              <div>
+                <div style={{ fontFamily: 'var(--font-display)', color: 'var(--parch)', fontSize: '.88rem', fontWeight: 700 }}>{title}</div>
+                <div className="text-tiny" style={{ marginTop: '.2rem', lineHeight: 1.4 }}>{desc}</div>
+              </div>
+              {correctionMode === key && <div style={{ marginLeft: 'auto', color: 'var(--gold-light)', fontSize: '1rem' }}>✓</div>}
+            </div>
+          ))}
+        </div>
+
+        <button className="btn btn-primary w-full" style={{ padding: '1rem', fontSize: '1.1rem' }} onClick={() => setPhase('ready')}>
           Continuer →
         </button>
-
         <BottomNav />
       </div>
     );
@@ -329,10 +311,10 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
           }}
         >
           {[
-            ['🤖', 'IA (65% précision)'],
+            [AI_LEVELS[difficulty].label.split(' ')[0], AI_LEVELS[difficulty].label],
             ['⚡', '10s/question'],
             ['🔥', 'Combos +3'],
-            ['⚔️', 'Attaque spéciale']
+            ['⚔️', `+${AI_LEVELS[difficulty].xpBonus} XP victoire`]
           ].map(([ic, lb]) => (
             <div key={lb}>
               <div style={{ fontSize: '1.3rem' }}>{ic}</div>
@@ -359,7 +341,7 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
   /* ── DONE ── */
   if (phase === 'done') {
     const won = scores[0] > scores[1];
-    const xp = won ? 100 : 40;
+    const xp = won ? AI_LEVELS[difficulty].xpBonus : Math.floor(AI_LEVELS[difficulty].xpBonus * 0.4);
     const correct = history.filter((h) => h.ok).length;
     const wrong = history.filter((h) => !h.ok);
 
@@ -620,9 +602,13 @@ Moi: ${scores[0]} pts · IA: ${scores[1]} pts
             <div style={{ color: 'var(--sage)', fontWeight: 700, marginTop: '.2rem' }}>
               ✓ {fb.correct}
             </div>
+            <BibleRef ref={q?.ref} />
           </div>
         ) : fb?.ok ? (
-          <div style={{ fontSize: '2rem' }}>✅</div>
+          <div>
+            <div style={{ fontSize: '2rem' }}>✅</div>
+            <BibleRef ref={q?.ref} />
+          </div>
         ) : fb && correctionMode === 'recap' && !fb.ok ? (
           <div style={{ fontSize: '1.6rem' }}>❌</div>
         ) : (

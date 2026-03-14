@@ -37,6 +37,11 @@ export function GameProvider({ children }) {
     return xpEarned;
   };
 
+  // Dépense des XP (pour le skip de niveau dans Escape, etc.)
+  const spendXP = (amount) => {
+    setStats(prev => ({ ...prev, xp: Math.max(0, prev.xp - amount) }));
+  };
+
   const saveProfile = (name, avatar) => {
     setProfile({ name: name.trim() || 'Anonyme', avatar, setupDone: true });
   };
@@ -45,7 +50,7 @@ export function GameProvider({ children }) {
   const xpProgress  = stats.xp % 100;
 
   return (
-    <GameContext.Provider value={{ stats, level, xpProgress, profile, saveProfile, recordQuizResult, AVATARS }}>
+    <GameContext.Provider value={{ stats, level, xpProgress, profile, saveProfile, recordQuizResult, spendXP, AVATARS }}>
       {children}
     </GameContext.Provider>
   );
